@@ -53,9 +53,17 @@ class HandleCollisionsAction(Action):
         Args:
             cast (Cast): The cast of Actors in the game.
         """
-        snake = cast.get_first_actor("snakes")
-        head = snake.get_segments()[0]
-        segments = snake.get_segments()[1:]
+        snake = cast.get_actors("snakes")
+        snake1 = snake[0]
+        snake2 = snake[1]
+        head = snake1.get_segments()[0]
+        head2 = snake2.get_segments()[1]
+        segments = snake1.get_segments()[1:]
+        segments2 = snake2.get_segments()[1:]
+        
+        for segment2 in segments2:
+            if head2.get_position().equals(segment2.get_position()):
+                self._is_game_over = True
         
         for segment in segments:
             if head.get_position().equals(segment.get_position()):

@@ -29,21 +29,49 @@ class ControlActorsAction(Action):
             cast (Cast): The cast of Actors in the game.
             script (Script): The script of Actions in the game.
         """
+        worm = None
         # left
         if self._keyboard_service.is_key_down('a'):
             self._direction = Point(-constants.CELL_SIZE, 0)
+            worm = 0
         
         # right
         if self._keyboard_service.is_key_down('d'):
             self._direction = Point(constants.CELL_SIZE, 0)
+            worm = 0
         
         # up
         if self._keyboard_service.is_key_down('w'):
             self._direction = Point(0, -constants.CELL_SIZE)
+            worm = 0
         
         # down
         if self._keyboard_service.is_key_down('s'):
             self._direction = Point(0, constants.CELL_SIZE)
+            worm = 0
         
-        snake = cast.get_first_actor("snakes")
-        snake.turn_head(self._direction)
+        # left
+        if self._keyboard_service.is_key_down('j'):
+            self._direction = Point(-constants.CELL_SIZE, 0)
+            worm = 1
+        
+        # right
+        if self._keyboard_service.is_key_down('l'):
+            self._direction = Point(constants.CELL_SIZE, 0)
+            worm = 1
+        
+        # up
+        if self._keyboard_service.is_key_down('i'):
+            self._direction = Point(0, -constants.CELL_SIZE)
+            worm = 1
+        
+        # down
+        if self._keyboard_service.is_key_down('k'):
+            self._direction = Point(0, constants.CELL_SIZE)
+            worm = 1
+        
+        snake = cast.get_actors("snakes")
+        if worm == 0:
+            snake[0].turn_head(self._direction)
+        if worm == 1:
+            snake[1].turn_head(self._direction)
