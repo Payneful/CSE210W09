@@ -20,8 +20,8 @@ def main():
     
     # create the cast
     cast = Cast()
-    cast.add_actor("snakes",Snake(constants.MAX_X * 0.25))
-    cast.add_actor("snakes", Snake(constants.MAX_X * 0.75))
+    cast.add_actor("snakes", Snake(constants.MAX_X * 0.25,0))
+    cast.add_actor("snakes", Snake(constants.MAX_X * 0.75,1))
     cast.add_actor("scores", Score())
    
     # start the game
