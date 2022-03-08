@@ -4,9 +4,9 @@ from game.shared.color import Color
 COLUMNS = 40
 ROWS = 20
 CELL_SIZE = 15
-MAX_X = 900
-MAX_Y = 600
-FRAME_RATE = 15
+MAX_X = 1200
+MAX_Y = 900
+FRAME_RATE = 9
 FONT_SIZE = 15
 CAPTION = "Snake"
 SNAKE_LENGTH = 8

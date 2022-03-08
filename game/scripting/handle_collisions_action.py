@@ -30,6 +30,17 @@ class HandleCollisionsAction(Action):
         if not self._is_game_over:
             self._handle_segment_collision(cast)
             self._handle_game_over(cast)
+            self._handle_time_change(cast)
+            
+    def _handle_time_change(self,cast):
+        """Per frame changing for the worm growth.
+        
+        Args:
+            cast (Cast): The cast of Actors in the game.
+        """
+        snakes = cast.get_actors("snakes")
+        for snake in snakes:
+            snake.grow_tail(1)
 
     def _handle_segment_collision(self, cast):
         """Sets the game over flag if the snake collides with one of its segments.

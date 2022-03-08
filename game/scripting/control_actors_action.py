@@ -30,8 +30,6 @@ class ControlActorsAction(Action):
             script (Script): The script of Actions in the game.
         """
         worm = None
-        segments = 4
-        old_direction = self._direction
 
         # left
         if self._keyboard_service.is_key_down('a'):
@@ -76,10 +74,6 @@ class ControlActorsAction(Action):
         snake = cast.get_actors("snakes")
         if worm == 0:
             snake[0].turn_head(self._direction)
-            if self._direction != old_direction:
-                snake[0].grow_tail(segments, constants.GREEN)
 
         if worm == 1:
             snake[1].turn_head(self._direction)
-            if self._direction !=old_direction:
-                snake[1].grow_tail(segments, constants.RED)

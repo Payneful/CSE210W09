@@ -16,6 +16,7 @@ class Snake(Actor):
         super().__init__()
         self._segments = []
         self._prepare_body(x_position,_snake)
+        self._snake = _snake
 
     def get_segments(self):
         return self._segments
@@ -34,12 +35,17 @@ class Snake(Actor):
     def get_head(self):
         return self._segments[0]
 
-    def grow_tail(self, number_of_segments, color):
+    def grow_tail(self, number_of_segments):
         for i in range(number_of_segments):
             tail = self._segments[-1]
             velocity = tail.get_velocity()
             offset = velocity.reverse()
             position = tail.get_position().add(offset)
+            
+            if self._snake == 0:
+                color = constants.GREEN
+            elif self._snake == 1:
+                color = constants.RED
             
             segment = Actor()
             segment.set_position(position)
@@ -60,7 +66,7 @@ class Snake(Actor):
             text = "8" if i == 0 else "#"
             if _snake == 0:
                 color = constants.GREEN
-            if _snake == 1:
+            elif _snake == 1:
                 color = constants.RED
             
             segment = Actor()
