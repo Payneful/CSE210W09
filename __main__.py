@@ -1,7 +1,6 @@
 import constants
 
 from game.casting.cast import Cast
-from game.casting.food import Food
 from game.casting.score import Score
 from game.casting.snake import Snake
 from game.scripting.script import Script
@@ -18,10 +17,21 @@ from game.shared.point import Point
 
 def main():
     
+    # ask for player count
+    players = [2,3]
+    player = 0
+    while player not in players:
+        player = int(input("How many players?"))
+    
     # create the cast
     cast = Cast()
-    cast.add_actor("snakes", Snake(constants.MAX_X * 0.25,0))
-    cast.add_actor("snakes", Snake(constants.MAX_X * 0.75,1))
+    if player == 2:
+        cast.add_actor("snakes", Snake(constants.MAX_X * 0.25,0))
+        cast.add_actor("snakes", Snake(constants.MAX_X * 0.75,1))
+    if player == 3:
+        cast.add_actor("snakes", Snake(constants.MAX_X * 0.25,0))
+        cast.add_actor("snakes", Snake(constants.MAX_X * 0.50,1))
+        cast.add_actor("snakes", Snake(constants.MAX_X * 0.75,2))
     cast.add_actor("scores", Score())
    
     # start the game
