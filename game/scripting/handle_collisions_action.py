@@ -18,7 +18,6 @@ class HandleCollisionsAction(Action):
     def __init__(self):
         """Constructs a new HandleCollisionsAction."""
         self._is_game_over = False
-        self._winner = 0
 
     def execute(self, cast, script):
         """Executes the handle collisions action.
@@ -48,6 +47,7 @@ class HandleCollisionsAction(Action):
         Args:
             cast (Cast): The cast of Actors in the game.
         """
+        
         snakes = cast.get_actors("snakes")
         heads = []
         segments = []
@@ -79,7 +79,7 @@ class HandleCollisionsAction(Action):
             y = int(constants.MAX_Y / 2)
             position = Point(x, y)
 
-            text = f"Game Over!\nPlayer {self._winner} wins!"
+            text = f"Game Over!\n{self._winner}!"
             message = Actor()
             message.set_text(text)
             message.set_position(position)
