@@ -29,51 +29,45 @@ class ControlActorsAction(Action):
             cast (Cast): The cast of Actors in the game.
             script (Script): The script of Actions in the game.
         """
-        worm = None
+        snakes = cast.get_actors("snakes")
 
         # left
         if self._keyboard_service.is_key_down('a'):
-            self._direction = Point(-constants.CELL_SIZE, 0)
-            worm = 0
+            snakes[0].turn_head(Point(-constants.CELL_SIZE, 0))
         
         # right
         if self._keyboard_service.is_key_down('d'):
-            self._direction = Point(constants.CELL_SIZE, 0)
-            worm = 0
+            snakes[0].turn_head(Point(constants.CELL_SIZE, 0))
         
         # up
         if self._keyboard_service.is_key_down('w'):
-            self._direction = Point(0, -constants.CELL_SIZE)
-            worm = 0
+            snakes[0].turn_head(Point(0, -constants.CELL_SIZE))
         
         # down
         if self._keyboard_service.is_key_down('s'):
-            self._direction = Point(0, constants.CELL_SIZE)
-            worm = 0
+            snakes[0].turn_head(Point(0, constants.CELL_SIZE))
         
         # left
         if self._keyboard_service.is_key_down('j'):
-            self._direction = Point(-constants.CELL_SIZE, 0)
-            worm = 1
-        
+            snakes[1].turn_head(Point(-constants.CELL_SIZE, 0))
+            
         # right
         if self._keyboard_service.is_key_down('l'):
-            self._direction = Point(constants.CELL_SIZE, 0)
-            worm = 1
+            snakes[1].turn_head(Point(constants.CELL_SIZE, 0))
         
         # up
         if self._keyboard_service.is_key_down('i'):
-            self._direction = Point(0, -constants.CELL_SIZE)
-            worm = 1
+            snakes[1].turn_head(Point(0, -constants.CELL_SIZE))
         
         # down
         if self._keyboard_service.is_key_down('k'):
-            self._direction = Point(0, constants.CELL_SIZE)
-            worm = 1
+            snakes[1].turn_head(Point(0, constants.CELL_SIZE))
         
+        """
         snake = cast.get_actors("snakes")
-        if worm == 0:
+        if worm1:
             snake[0].turn_head(self._direction)
 
-        if worm == 1:
+        if worm2:
             snake[1].turn_head(self._direction)
+        """
