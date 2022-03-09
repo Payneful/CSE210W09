@@ -18,7 +18,6 @@ class HandleCollisionsAction(Action):
     def __init__(self):
         """Constructs a new HandleCollisionsAction."""
         self._is_game_over = False
-        self._winner = 0
 
     def execute(self, cast, script):
         """Executes the handle collisions action.
@@ -58,11 +57,14 @@ class HandleCollisionsAction(Action):
         for segment in segments:
             if head.get_position().equals(segment.get_position()):
                 self._is_game_over = True
-                self._winner = 2
+                self._winner = "Red wins"
             if head2.get_position().equals(segment.get_position()):
                 self._is_game_over = True
-                self._winner = 1
-        
+                self._winner = "Green wins"
+        if head.get_position().equals(head2.get_position()):
+            self._is_game_over = True
+            self._winner = "Tie"
+
     def _handle_game_over(self, cast):
         """Shows the 'game over' message and turns the snake and food white if the game is over.
         
@@ -79,7 +81,7 @@ class HandleCollisionsAction(Action):
             y = int(constants.MAX_Y / 2)
             position = Point(x, y)
 
-            text = f"Game Over!\nPlayer {self._winner} wins!"
+            text = f"Game Over!\n{self._winner}!"
             message = Actor()
             message.set_text(text)
             message.set_position(position)
