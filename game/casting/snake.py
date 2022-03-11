@@ -15,7 +15,7 @@ class Snake(Actor):
     def __init__(self, x_position, _snake):
         super().__init__()
         self._segments = []
-        self._prepare_body(x_position, _snake)
+        self._prepare_body(x_position,_snake)
         self._snake = _snake
 
     def get_segments(self):
@@ -46,8 +46,6 @@ class Snake(Actor):
                 color = constants.GREEN
             elif self._snake == 1:
                 color = constants.RED
-            elif self._snake == 2:
-                color = constants.BLUE
             
             segment = Actor()
             segment.set_position(position)
@@ -70,8 +68,6 @@ class Snake(Actor):
                 color = constants.GREEN
             elif _snake == 1:
                 color = constants.RED
-            elif _snake == 2:
-                color = constants.BLUE
             
             segment = Actor()
             segment.set_position(position)
