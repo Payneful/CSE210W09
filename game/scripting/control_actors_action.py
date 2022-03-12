@@ -13,6 +13,57 @@ class ControlActorsAction(Action):
         _keyboard_service (KeyboardService): An instance of KeyboardService.
     """
 
+    # def __init__(self, keyboard_service):
+    #     """Constructs a new ControlActorsAction using the specified KeyboardService.
+        
+    #     Args:
+    #         keyboard_service (KeyboardService): An instance of KeyboardService.
+    #     """
+    #     self._keyboard_service = keyboard_service
+    #     self._direction = Point(constants.CELL_SIZE, 0)
+
+    # def execute(self, cast, script):
+    #     """Executes the control actors action.
+
+    #     Args:
+    #         cast (Cast): The cast of Actors in the game.
+    #         script (Script): The script of Actions in the game.
+    #     """
+    #     snakes = cast.get_actors("snakes")
+
+    #     # left
+    #     if self._keyboard_service.is_key_down('a'):
+    #         snakes[0].turn_head(Point(-constants.CELL_SIZE, 0))
+        
+    #     # right
+    #     if self._keyboard_service.is_key_down('d'):
+    #         snakes[0].turn_head(Point(constants.CELL_SIZE, 0))
+        
+    #     # up
+    #     if self._keyboard_service.is_key_down('w'):
+    #         snakes[0].turn_head(Point(0, -constants.CELL_SIZE))
+        
+    #     # down
+    #     if self._keyboard_service.is_key_down('s'):
+    #         snakes[0].turn_head(Point(0, constants.CELL_SIZE))
+        
+    #     # left
+    #     if self._keyboard_service.is_key_down('j'):
+    #         snakes[1].turn_head(Point(-constants.CELL_SIZE, 0))
+            
+    #     # right
+    #     if self._keyboard_service.is_key_down('l'):
+    #         snakes[1].turn_head(Point(constants.CELL_SIZE, 0))
+        
+    #     # up
+    #     if self._keyboard_service.is_key_down('i'):
+    #         snakes[1].turn_head(Point(0, -constants.CELL_SIZE))
+        
+    #     # down
+    #     if self._keyboard_service.is_key_down('k'):
+    #         snakes[1].turn_head(Point(0, constants.CELL_SIZE))
+        
+
     def __init__(self, keyboard_service):
         """Constructs a new ControlActorsAction using the specified KeyboardService.
         
@@ -26,12 +77,10 @@ class ControlActorsAction(Action):
         self.key3 = 'KEY_DOWN'
         self.player1_move = ["a", "s", "w", "d"]
         self.player2_move = ["j", "k", "l", "i"]
-        self.player3_move = ["KEY_LEFT", "KEY_RIGHT", "KEY_UP", "KEY_DOWN"]
 
         
     def execute(self, cast, script):
         """Executes the control actors action.
-
         Args:
             cast (Cast): The cast of Actors in the game.
             script (Script): The script of Actions in the game.
@@ -85,31 +134,6 @@ class ControlActorsAction(Action):
                 snakes[1].turn_head(Point(0, constants.CELL_SIZE))
                 self.key2 = "k"
         
-        # left
-        if self._keyboard_service.is_key_down('KEY_LEFT'):
-            if self._validate_direction('KEY_LEFT'):
-                snakes[2].turn_head(Point(-constants.CELL_SIZE, 0))
-                self.key3 = "KEY_LEFT"
-            
-        # right
-        if self._keyboard_service.is_key_down('KEY_RIGHT'):
-            if self._validate_direction('KEY_RIGHT'):
-                snakes[2].turn_head(Point(constants.CELL_SIZE, 0))
-                self.key3 = "KEY_RIGHT"
-        
-        # up
-        if self._keyboard_service.is_key_down('KEY_UP'):
-            if self._validate_direction("KEY_UP"):
-                snakes[2].turn_head(Point(0, -constants.CELL_SIZE))
-                self.key3 = "KEY_UP"
-        
-        # down
-        if self._keyboard_service.is_key_down('KEY_DOWN'):
-            if self._validate_direction("KEY_DOWN"):
-                snakes[2].turn_head(Point(0, constants.CELL_SIZE))
-                self.key3 = "KEY_DOWN"
-
-
             
     def _validate_direction(self, key_pressed):
         """Validiates user input to prevent user from moving back on
@@ -150,22 +174,6 @@ class ControlActorsAction(Action):
             right = "l"
 
             last_direction = self.key2
-
-        # directions for snake[2]
-        elif key_pressed in self.player3_move:
-            left = "KEY_LEFT"
-            opposite_left = "KEY_RIGHT"
-
-            opposite_down = "KEY_UP"
-            down = "KEY_DOWN"
-
-            opposite_up = "KEY_DOWN"
-            up = "KEY_UP"
-
-            opposite_right = "KEY_LEFT"
-            right = "KEY_RIGHT"
-
-            last_direction = self.key3
 
         # Validate movement
         valid_move = True
