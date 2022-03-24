@@ -21,8 +21,8 @@ class Point:
         
     def __add__(self,other):
         """built in add symbol specifier for point"""
-        x = self._x + other.get_x()
-        y = self._y + other.get_y()
+        x = self._x + other[0].get_x()
+        y = self._y + other[1].get_y()
         return Point(x, y)
 
     def add(self, other):
@@ -34,8 +34,8 @@ class Point:
         Returns:
             Point: A new Point that is the sum.
         """
-        x = self._x + other.get_x()
-        y = self._y + other.get_y()
+        x = self._x + other[0].get_x()
+        y = self._y + other[1].get_y()
         return Point(x, y)
 
     def __eq__(self, other):

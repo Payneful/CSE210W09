@@ -116,3 +116,11 @@ class Actor:
             velocity (Point): The given velocity.
         """
         self._velocity = velocity
+
+    def add_position(self, position):
+        """Adds to X position
+        
+        Args:
+            Position
+        """
+        x = (self._position.get_x() + position) % constants.MAX_X

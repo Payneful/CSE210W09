@@ -15,13 +15,11 @@ from game.services.video_service import VideoService
 from game.shared.color import Color
 from game.shared.point import Point
 
-
 def main():
     
     # create the cast
     cast = Cast()
-    cast.add_actor("snakes", Snake(constants.MAX_X * 0.25,0))
-    cast.add_actor("snakes", Snake(constants.MAX_X * 0.75,1))
+    cast.add_actor("snake", Snake())
     cast.add_actor("scores", Score())
    
     # start the game
@@ -40,3 +38,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
+    
+    
+# pyray.check_collision_boxes(box1: BoundingBox, box2: BoundingBox)

@@ -15,15 +15,10 @@ class KeyboardService:
         """Constructs a new KeyboardService."""
         self._keys = {}
         
-        self._keys['w'] = pyray.KEY_W
+        self._keys['f'] = pyray.KEY_F
         self._keys['a'] = pyray.KEY_A
-        self._keys['s'] = pyray.KEY_S
         self._keys['d'] = pyray.KEY_D
-
-        self._keys['i'] = pyray.KEY_I
-        self._keys['j'] = pyray.KEY_J
-        self._keys['k'] = pyray.KEY_K
-        self._keys['l'] = pyray.KEY_L
+        self._keys['spacebar'] = pyray.KEY_SPACE
 
     def is_key_up(self, key):
         """Checks if the given key is currently up.
