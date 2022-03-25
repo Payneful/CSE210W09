@@ -10,20 +10,18 @@ class Bullet(Actor):
 
     def __init__(self, position_x, position_y, ally = "player"):
         super().__init__()
-        self._prepare_bullet(position_x, position_y, ally)
+        self._prepare_bullet(position_x + 4, position_y, ally)
         self._set_velocity()
         
     def _set_velocity(self):
-        if self._ally == "player":
+        if self.ally == "player":
             self._velocity = Point(0, -15)
-            self.color = constants.BLUE
+            self._color = constants.BLUE
         else:
             self._velocity = Point(0, 15)
-            self.color = constants.RED
+            self._color = constants.RED
 
     def _prepare_bullet(self, position_x, position_y, ally):
-        self._ally = ally
+        self.ally = ally
         self._position = Point(position_x, position_y)
-        # self._velocity = Point(0, 0)
-        self._text = "^"
-        self.color = constants.WHITE
+        self._text = "|"

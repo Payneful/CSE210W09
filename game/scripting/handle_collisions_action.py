@@ -39,18 +39,28 @@ class HandleCollisionsAction(Action):
         Args:
             cast (Cast): The cast of Actors in the game.
         """
-        temp = 20
+        range = 10
         bullets = cast.get_actors("bullets")
         for bullet in bullets:
-            if bullet._position.get_y() <= 0:
+            if bullet._position.get_y() <= 0 or bullet._position.get_y() >= constants.MAX_Y:
                 cast.remove_actor("bullets", bullet)
-            else:
-                ships = cast.get_actors("ships")
+            elif bullet.ally != "ship": #collision with ships
+                ships = cast.get_actors("ships") 
                 for ship in ships:
-                    if ship._position.get_x() + temp >= bullet._position.get_x() and ship._position.get_y() + temp >= bullet._position.get_y() and ship._position.get_x() - temp <= bullet._position.get_x() and ship._position.get_y() - temp <= bullet._position.get_y():
+                    if ship._position.get_x() + range >= bullet._position.get_x() and ship._position.get_y() + range >= bullet._position.get_y() and ship._position.get_x() - range <= bullet._position.get_x() and ship._position.get_y() - range <= bullet._position.get_y():
                         cast.remove_actor("ships", ship)
                         cast.remove_actor("bullets", bullet)
                         break
+            elif bullet.ally != "player":
+                player = cast.get_first_actor("snakes")
+                if player._position.get_x() + range >= bullet._position.get_x() and player._position.get_y() + range >= bullet._position.get_y() and player._position.get_x() - range <= bullet._position.get_x() and player._position.get_y() - range <= bullet._position.get_y():
+                    print("Game Over")
+                    cast.remove_actor("bullets", bullet)
+                    break
+                    
+
+
+
 
     
     def _handle_edge_collision(self, cast):

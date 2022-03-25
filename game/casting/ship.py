@@ -3,8 +3,6 @@ import constants
 from game.casting.actor import Actor
 from game.shared.point import Point
 
-from game.casting.cast import Cast
-
 
 class Ship(Actor):
     """
@@ -35,11 +33,9 @@ class Ship(Actor):
             max_y (int): The maximum y value.
         """
 
-        self._velocity._x = int((self.speed * self.direction)) + 1
+        self._velocity._x = int((self.speed * self.direction))
         x = (self._position.get_x() + self._velocity.get_x())# % constants.MAX_X
         y = (self._position.get_y() + self._velocity.get_y())# % constants.MAX_Y
         self._position = Point(x, y)
 
-
-    def _shoot(self):
-        pass
+        

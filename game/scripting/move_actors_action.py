@@ -1,4 +1,5 @@
 from game.scripting.action import Action
+import constants
 
 
 class MoveActorsAction(Action):
@@ -12,7 +13,7 @@ class MoveActorsAction(Action):
         ships = cast.get_actors("ships")
 
         for ship in ships:
-            ship.speed = 15 / (len(ships)/2)
+            ship.speed = (constants.MAX_SHIP_SPEED / (len(ships)/2)) + 1
 
     def execute(self, cast, script):
         """Executes the move actors action.
