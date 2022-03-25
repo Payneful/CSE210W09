@@ -16,3 +16,6 @@ YELLOW = Color(255, 255, 0)
 GREEN = Color(0, 255, 0)
 BLUE = Color(0, 0, 255)
 PURPLE = Color(255, 0, 255)
+
+MAX_STAGE = 5
+MAX_SHIP_SPEED = 15

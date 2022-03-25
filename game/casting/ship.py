@@ -1,6 +1,9 @@
+import imp
 import constants
 from game.casting.actor import Actor
 from game.shared.point import Point
+
+from game.casting.cast import Cast
 
 
 class Ship(Actor):
@@ -15,12 +18,27 @@ class Ship(Actor):
         """
         Parameters: x position, y position,  
         """
-        pass
         super().__init__()
         self._position = Point(x, y)
-        self._velocity = Point(15, 0) #starts off going Right
+        self.direction = 1 #1 is Right, -1 is Left. This also operates as a speed multiplier and can take floats without breaking anything.
+        self._velocity = Point(1, 0) #starts off going Right
         self._color = color
         self._text = "V"
+        self.speed = 1
+
+    def move_next(self):
+        """Moves the actor to its next position according to its velocity. Will wrap the position 
+        from one side of the screen to the other when it reaches the given maximum x and y values.
+        
+        Args:
+            max_x (int): The maximum x value.
+            max_y (int): The maximum y value.
+        """
+
+        self._velocity._x = int((self.speed * self.direction)) + 1
+        x = (self._position.get_x() + self._velocity.get_x())# % constants.MAX_X
+        y = (self._position.get_y() + self._velocity.get_y())# % constants.MAX_Y
+        self._position = Point(x, y)
 
 
     def _shoot(self):

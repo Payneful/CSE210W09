@@ -1,4 +1,5 @@
 from tkinter import N
+from turtle import position
 import constants
 from game.casting.actor import Actor
 from game.scripting.action import Action
@@ -28,22 +29,29 @@ class HandleCollisionsAction(Action):
             script (Script): The script of Actions in the game.
         """
         if not self._is_game_over:
-            self._handle_segment_collision(cast)
+            self._handle_bullet_collision(cast)
             self._handle_edge_collision(cast)
             # self._handle_game_over(cast)
 
-    def _handle_segment_collision(self, cast):
+    def _handle_bullet_collision(self, cast):
         """Sets the game over flag if the snake collides with one of its segments.
         
         Args:
             cast (Cast): The cast of Actors in the game.
         """
+        temp = 20
         bullets = cast.get_actors("bullets")
         for bullet in bullets:
             if bullet._position.get_y() <= 0:
                 cast.remove_actor("bullets", bullet)
             else:
-                bullet._position.add([0,-constants.CELL_SIZE])
+                ships = cast.get_actors("ships")
+                for ship in ships:
+                    if ship._position.get_x() + temp >= bullet._position.get_x() and ship._position.get_y() + temp >= bullet._position.get_y() and ship._position.get_x() - temp <= bullet._position.get_x() and ship._position.get_y() - temp <= bullet._position.get_y():
+                        cast.remove_actor("ships", ship)
+                        cast.remove_actor("bullets", bullet)
+                        break
+
     
     def _handle_edge_collision(self, cast):
         """
@@ -52,13 +60,13 @@ class HandleCollisionsAction(Action):
         ships = cast.get_actors("ships")
 
         for ship in ships:
-            if ship._position._x <= 1 * constants.CELL_SIZE and ship._velocity._x < 0 or ship._position._x >= constants.MAX_X - constants.CELL_SIZE and ship._velocity._x > 0: #if the ship is on left edge and moving left or on right edge moving right
+            if ship._position._x <= 1 * constants.CELL_SIZE and ship.direction < 0 or ship._position._x >= constants.MAX_X - constants.CELL_SIZE and ship.direction > 0: #if the ship is on left edge and moving left or on right edge moving right
                 change_direction = True
                 break
         if change_direction == True:
             for ship in ships:
+                ship.direction = ship.direction * -1
                 ship._position.add([0, 15])
-                ship._velocity._x = ship._velocity._x * -1
 
     def _handle_game_over(self, cast):
         """Shows the 'game over' message and turns the snake and food white if the game is over.

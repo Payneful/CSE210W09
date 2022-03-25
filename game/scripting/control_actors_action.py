@@ -42,12 +42,6 @@ class ControlActorsAction(Action):
         # right
         if self._keyboard_service.is_key_down('d'):
             snake.turn_head(constants.CELL_SIZE)
-
-        # stop
-        # if not self._keyboard_service.is_key_down('a') and not self._keyboard_service.is_key_down('d'):
-        #     print(Point(0,0))
-        #     print(type(Point(0,0)))
-        #     snake.turn_head(Point(0, 0))
             
         # firemode
         # if self._keyboard_service.is_key_down('f'):
