@@ -4,6 +4,7 @@ from game.casting.actor import Actor
 from game.scripting.action import Action
 from game.shared.point import Point
 
+
 class HandleCollisionsAction(Action):
     """
     An update action that handles interactions between the actors.
@@ -19,6 +20,8 @@ class HandleCollisionsAction(Action):
         """Constructs a new HandleCollisionsAction."""
         self._is_game_over = False
         self._winner = 0
+        self._bullet_speed = constants.BULLET_SPEED
+        self._points = constants.POINTS
 
     def execute(self, cast, script):
         """Executes the handle collisions action.
@@ -28,24 +31,33 @@ class HandleCollisionsAction(Action):
             script (Script): The script of Actions in the game.
         """
         if not self._is_game_over:
-            self._handle_segment_collision(cast)
-            self._handle_edge_collision(cast)
+            self._handle_bullet_edge_of_map(cast)
+            self._handle_ship_edge_collision(cast)
+            self._handle_bullet_ship_collision(cast)
             # self._handle_game_over(cast)
 
-    def _handle_segment_collision(self, cast):
+    def _handle_bullet_edge_of_map(self, cast):
         """Sets the game over flag if the snake collides with one of its segments.
         
         Args:
             cast (Cast): The cast of Actors in the game.
         """
         bullets = cast.get_actors("bullets")
+        
         for bullet in bullets:
-            if bullet._position.get_y() <= 0:
-                cast.remove_actor("bullets", bullet)
-            else:
-                bullet._position.add([0,-constants.CELL_SIZE])
+            not_done_moving = True
+            loop_count = 0
+            while not_done_moving:
+                if bullet._position.get_y() <= 0:
+                    cast.remove_actor("bullets", bullet)
+                    not_done_moving = False
+                else:
+                    bullet._position.add([0,-constants.CELL_SIZE])
+                    loop_count += 1
+                    if loop_count == self._bullet_speed:
+                        not_done_moving = False
     
-    def _handle_edge_collision(self, cast):
+    def _handle_ship_edge_collision(self, cast):
         """
         Reverses movment of ships when they hit the edge of the screen"""
         change_direction = False
@@ -59,6 +71,26 @@ class HandleCollisionsAction(Action):
             for ship in ships:
                 ship._position.add([0, 15])
                 ship._velocity._x = ship._velocity._x * -1
+
+    def _handle_bullet_ship_collision(self, cast):
+        """Determines if the bullet collides with the ships
+        Args:
+            self-- an instance of Handle_collisiions_action
+            cast-- an instance of the cast class"""
+
+        bullets = cast.get_actors("bullets")
+        ships = cast.get_actors("ships")
+        score = cast.get_first_actor("scores")
+
+        for bullet in bullets:
+            for ship in ships:
+                if bullet._position.equals(ship._position):
+                    print("Enemy ship down!")
+                    cast.remove_actor("bullets", bullet)
+                    cast.remove_actor("ships", ship)
+                    score.add_points(self._points)
+
+    
 
     def _handle_game_over(self, cast):
         """Shows the 'game over' message and turns the snake and food white if the game is over.
