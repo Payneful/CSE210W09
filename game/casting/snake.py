@@ -21,41 +21,28 @@ class Snake(Actor):
         self._firemode = 0
 
     def move_next(self):
-        # update velocities
-        previous = self._segments[0]
-        velocity = previous.get_velocity()
-        trailing.set_velocity(velocity)
-
-    def get_head(self):
-        return self._segments[0]
+        pass
+        # # update velocities
+        # previous = self._segments[0]
+        # velocity = self._position()
+        # # trailing.set_velocity(velocity)
 
     def turn_head(self, position):
-        self._segments[0].add_position(position)
+        # self._position += int(position)
+        self._position.add([position, 0])
+        print(self._position.get_x())
+        print(self._position.get_y())
     
     def _prepare_body(self):
-        y = int(constants.CELL_SIZE * 2)
+        y = int(constants.CELL_SIZE * 55)
         x = int(constants.MAX_X / 2)
-        position = Point(x, y * constants.CELL_SIZE)
-        velocity = Point(0, 0)
-        text = "#"
-        color = constants.GREEN
-            
-        segment = Actor()
-        segment.set_position(position)
-        segment.set_velocity(velocity)
-        segment.set_text(text)
-        segment.set_color(color)
-        self._segments.append(segment)
-
-
+        self._position = Point(x, y)
+        self._velocity = Point(0, 0)
+        self._text = "#"
+        self._color = constants.GREEN
+        
     def firemode(self):
         """
         Attrabute to change firemode
-        """
-        pass
-
-    def shoot(self):
-        """
-        Attrabute to shoot projectiles
         """
         pass

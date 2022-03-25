@@ -1,6 +1,7 @@
 import constants
 from game.scripting.action import Action
 from game.shared.point import Point
+from game.casting.bullet import Bullet
 
 
 class ControlActorsAction(Action):
@@ -33,13 +34,14 @@ class ControlActorsAction(Action):
         """
         
         snake = cast.get_first_actor("snakes")
+
         # left
         if self._keyboard_service.is_key_down('a'):
-            snake.turn_head(constants.CELL_SIZE)
+            snake.turn_head(-constants.CELL_SIZE)
         
         # right
         if self._keyboard_service.is_key_down('d'):
-            snake.turn_head(-constants.CELL_SIZE)
+            snake.turn_head(constants.CELL_SIZE)
 
         # stop
         # if not self._keyboard_service.is_key_down('a') and not self._keyboard_service.is_key_down('d'):
@@ -53,5 +55,4 @@ class ControlActorsAction(Action):
         
         # shoot
         if self._keyboard_service.is_key_down('spacebar'):
-            snake.shoot()
-        
+            cast.add_actor("bullets", Bullet(snake._position.get_x(),snake._position.get_y()))

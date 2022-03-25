@@ -28,19 +28,9 @@ class HandleCollisionsAction(Action):
             script (Script): The script of Actions in the game.
         """
         if not self._is_game_over:
+            print("not game over")
             self._handle_segment_collision(cast)
-            self._handle_game_over(cast)
-            self._handle_time_change(cast)
-            
-    def _handle_time_change(self,cast):
-        """Per frame changing for the worm growth.
-        
-        Args:
-            cast (Cast): The cast of Actors in the game.
-        """
-        snakes = cast.get_actors("snakes")
-        for snake in snakes:
-            snake.grow_tail(1)
+            # self._handle_game_over(cast)
 
     def _handle_segment_collision(self, cast):
         """Sets the game over flag if the snake collides with one of its segments.
@@ -48,20 +38,12 @@ class HandleCollisionsAction(Action):
         Args:
             cast (Cast): The cast of Actors in the game.
         """
-        snake = cast.get_actors("snakes")
-        snake1 = snake[0]
-        snake2 = snake[1]
-        head = snake1.get_segments()[0]
-        head2 = snake2.get_segments()[0]
-        segments = snake1.get_segments()[1:] + snake2.get_segments()[1:]
-        
-        for segment in segments:
-            if head.get_position().equals(segment.get_position()):
-                self._is_game_over = True
-                self._winner = 2
-            if head2.get_position().equals(segment.get_position()):
-                self._is_game_over = True
-                self._winner = 1
+        bullets = cast.get_actors("bullets")
+        for bullet in bullets:
+            if bullet._position.get_y() <= 0:
+                cast.remove_actor("bullets", bullet)
+            else:
+                bullet._position.add([0,-constants.CELL_SIZE])
         
     def _handle_game_over(self, cast):
         """Shows the 'game over' message and turns the snake and food white if the game is over.
