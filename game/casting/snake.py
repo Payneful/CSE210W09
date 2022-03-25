@@ -30,8 +30,6 @@ class Snake(Actor):
     def turn_head(self, position):
         # self._position += int(position)
         self._position.add([position, 0])
-        print(self._position.get_x())
-        print(self._position.get_y())
     
     def _prepare_body(self):
         y = int(constants.CELL_SIZE * 55)
