@@ -56,3 +56,5 @@ class ControlActorsAction(Action):
         # shoot
         if self._keyboard_service.is_key_down('spacebar'):
             cast.add_actor("bullets", Bullet(snake._position.get_x(),snake._position.get_y()))
+
+    

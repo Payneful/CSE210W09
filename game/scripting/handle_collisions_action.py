@@ -29,6 +29,7 @@ class HandleCollisionsAction(Action):
         """
         if not self._is_game_over:
             self._handle_segment_collision(cast)
+            self._handle_edge_collision(cast)
             # self._handle_game_over(cast)
 
     def _handle_segment_collision(self, cast):
@@ -43,7 +44,22 @@ class HandleCollisionsAction(Action):
                 cast.remove_actor("bullets", bullet)
             else:
                 bullet._position.add([0,-constants.CELL_SIZE])
-        
+    
+    def _handle_edge_collision(self, cast):
+        """
+        Reverses movment of ships when they hit the edge of the screen"""
+        change_direction = False
+        ships = cast.get_actors("ships")
+
+        for ship in ships:
+            if ship._position._x <= 1 * constants.CELL_SIZE and ship._velocity._x < 0 or ship._position._x >= constants.MAX_X - constants.CELL_SIZE and ship._velocity._x > 0: #if the ship is on left edge and moving left or on right edge moving right
+                change_direction = True
+                break
+        if change_direction == True:
+            for ship in ships:
+                ship._position.add([0, 15])
+                ship._velocity._x = ship._velocity._x * -1
+
     def _handle_game_over(self, cast):
         """Shows the 'game over' message and turns the snake and food white if the game is over.
         
