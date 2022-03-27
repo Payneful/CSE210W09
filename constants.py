@@ -6,7 +6,7 @@ ROWS = 20
 CELL_SIZE = 15
 MAX_X = 1200
 MAX_Y = 900
-FRAME_RATE = 20
+FRAME_RATE = 12
 FONT_SIZE = 15
 CAPTION = "Snake"
 SNAKE_LENGTH = 8
@@ -19,3 +19,14 @@ PURPLE = Color(255, 0, 255)
 
 POINTS = 100
 BULLET_SPEED = 1
+
+# X represents ship locations. O represents empty spaces.
+X = "X"
+O = "O"
+LEVELS = {"level_1":[X, X, X, O, O, X, X, O, O, O, X, X, O, O, O, X, X, O, O, X,
+                     X, X, O, O, X, X, X, O, O, X, X, X, X, O, O, X, X, X, X, O, 
+                     X, X, X, X, O, X, X, O, O, O, O, O, X, X, X, O, O, X, X, X, 
+                     ]
+        }
+
+SHIP_START = 450
