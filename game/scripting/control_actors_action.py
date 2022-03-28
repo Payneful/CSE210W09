@@ -56,7 +56,7 @@ class ControlActorsAction(Action):
         #     snake.fireMode()
         
         # shoot
-        if self._keyboard_service.is_key_down('spacebar'):
+        if self._keyboard_service.is_key_pressed('spacebar'):
             cast.add_actor("bullets", Bullet(snake._position.get_x(),snake._position.get_y()))
 
     

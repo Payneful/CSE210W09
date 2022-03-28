@@ -14,6 +14,7 @@ from game.directing.director import Director
 from game.scripting.stage_control import StageControl
 from game.services.keyboard_service import KeyboardService
 from game.services.video_service import VideoService
+from game.scripting.explosion_control import ExplosionControl
 from game.shared.color import Color
 from game.shared.point import Point
 
@@ -36,7 +37,8 @@ def main():
     script.add_action("update", HandleCollisionsAction())
     script.add_action("output", DrawActorsAction(video_service))
 
-    script.add_action("update", StageControl()  )
+    script.add_action("update", StageControl())
+    script.add_action("update", ExplosionControl())
     
     director = Director(video_service)
     director.start_game(cast, script)

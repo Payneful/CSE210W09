@@ -1,5 +1,7 @@
+import os
+import pathlib
 import pyray
-import constants
+from constants import *
 
 class VideoService:
     """Outputs the game state. The responsibility of the class of objects is to draw the game state 
@@ -13,6 +15,7 @@ class VideoService:
             debug (bool): whether or not to draw in debug mode.
         """
         self._debug = debug
+        self._textures = {}
 
     def close_window(self):
         """Closes the window and releases all computing resources."""
@@ -22,6 +25,7 @@ class VideoService:
         """Clears the buffer in preparation for the next rendering. This method should be called at
         the beginning of the game's output phase.
         """
+        raylib_color = self._to_raylib_color(BLACK)
         pyray.begin_drawing()
         pyray.clear_background(pyray.BLACK)
         if self._debug == True:
@@ -75,17 +79,54 @@ class VideoService:
         Args:
             title (string): The title of the window.
         """
-        pyray.init_window(constants.MAX_X, constants.MAX_Y, constants.CAPTION)
-        pyray.set_target_fps(constants.FRAME_RATE)
+        pyray.init_window(MAX_X, MAX_Y, CAPTION)
+        pyray.set_target_fps(FRAME_RATE)
 
     def _draw_grid(self):
         """Draws a grid on the screen."""
-        for y in range(0, constants.MAX_Y, constants.CELL_SIZE):
-            pyray.draw_line(0, y, constants.MAX_X, y, pyray.GRAY)
+        for y in range(0, MAX_Y, CELL_SIZE):
+            pyray.draw_line(0, y, MAX_X, y, pyray.GRAY)
             
-        for x in range(0, constants.MAX_X, constants.CELL_SIZE):
-            pyray.draw_line(x, 0, x, constants.MAX_Y, pyray.GRAY)
+        for x in range(0, MAX_X, CELL_SIZE):
+            pyray.draw_line(x, 0, x, MAX_Y, pyray.GRAY)
     
     def _get_x_offset(self, text, font_size):
         width = pyray.measure_text(text, font_size)
         return int(width / 2)
+
+    
+    def draw_image(self, image, position):
+        filepath = image.get_filename()
+        texture = self._textures[filepath]
+        x = position.get_x()
+        y = position.get_y()
+        raylib_position = pyray.Vector2(x, y)
+        scale = image.get_scale()
+        rotation = image.get_rotation()
+        tint = self._to_raylib_color(255,255,255)
+        pyray.draw_texture_ex(texture, raylib_position, rotation, scale, tint)
+
+    def load_images(self, directory):
+        filepaths = self._get_filepaths(directory, [".png", ".gif", ".jpg", ".jpeg", ".bmp"])
+        for filepath in filepaths:
+            if filepath not in self._textures.keys():
+                texture = pyray.load_texture(filepath)
+                self._textures[filepath] = texture
+
+    def unload_images(self):
+        for texture in self._textures.values():
+            pyray.unload_texture(texture)
+        self._textures.clear()
+
+    def _get_filepaths(self, directory, filter):
+        filepaths = []
+        for file in os.listdir(directory):
+            filename = os.path.join(directory, file)
+            extension = pathlib.Path(filename).suffix.lower()
+            if extension in filter:
+                filepaths.append(filename)
+        return filepaths
+
+    def _to_raylib_color(self, color):
+        r, g, b, a = color.to_tuple()
+        return pyray.Color(r, g, b, a)

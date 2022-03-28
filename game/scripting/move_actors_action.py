@@ -13,7 +13,7 @@ class MoveActorsAction(Action):
         ships = cast.get_actors("ships")
 
         for ship in ships:
-            ship.speed = (constants.MAX_SHIP_SPEED / (len(ships)/2)) + 1
+            ship.speed = (constants.MAX_SHIP_SPEED / (len(ships)/1.5)) + 1
 
     def execute(self, cast, script):
         """Executes the move actors action.

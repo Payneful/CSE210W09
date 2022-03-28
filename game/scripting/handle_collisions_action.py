@@ -1,9 +1,12 @@
+from multiprocessing.sharedctypes import Value
 from tkinter import N
 from turtle import position
 import constants
 from game.casting.actor import Actor
+from game.casting.explosion import Explosion
 from game.scripting.action import Action
 from game.shared.point import Point
+# from game.services.audio_service import AudioService
 
 
 class HandleCollisionsAction(Action):
@@ -23,6 +26,7 @@ class HandleCollisionsAction(Action):
         self._winner = 0
         self._bullet_speed = constants.BULLET_SPEED
         self._points = constants.POINTS
+        #self._hit = 
 
     def execute(self, cast, script):
         """Executes the handle collisions action.
@@ -45,19 +49,9 @@ class HandleCollisionsAction(Action):
         """
         range = 10
         bullets = cast.get_actors("bullets")
-        
         for bullet in bullets:
-            not_done_moving = True
-            loop_count = 0
-            while not_done_moving:
-                if bullet._position.get_y() <= 0:
-                    cast.remove_actor("bullets", bullet)
-                    not_done_moving = False
-                else:
-                    bullet._position.add([0,-constants.CELL_SIZE])
-                    loop_count += 1
-                    if loop_count == self._bullet_speed:
-                        not_done_moving = False
+            if bullet._position.get_y() <= 0 or bullet._position.get_y() > constants.MAX_Y:
+                cast.remove_actor("bullets", bullet)
     
     def _handle_ship_edge_collision(self, cast):
         """
@@ -79,18 +73,34 @@ class HandleCollisionsAction(Action):
         Args:
             self-- an instance of Handle_collisiions_action
             cast-- an instance of the cast class"""
+        
 
         bullets = cast.get_actors("bullets")
         ships = cast.get_actors("ships")
         score = cast.get_first_actor("scores")
+        player = cast.get_first_actor("snakes")
+
 
         for bullet in bullets:
-            for ship in ships:
-                if bullet._position.equals(ship._position):
-                    print("Enemy ship down!")
-                    cast.remove_actor("bullets", bullet)
-                    cast.remove_actor("ships", ship)
-                    score.add_points(self._points)
+            if bullet.ally != "ship":
+                for ship in ships:
+                    try:
+                        if bullet._position.equals_range(ship._position, 10):
+                            print("Enemy ship down!")
+                            cast.add_actor("explosions", Explosion(ship._position.get_x(), ship._position.get_y()))
+                            cast.remove_actor("bullets", bullet)
+                            cast.remove_actor("ships", ship)
+                            score.add_points(ship.score)
+                    except(ValueError):
+                        pass
+            elif bullet.ally != "player":
+                try:
+                    if bullet._position.equals_range(player._position, 10):
+                        print("Game Over")
+                        cast.remove_actor("bullets", bullet)
+                        cast.add_actor("explosions", Explosion(player._position.get_x(), player._position.get_y()))
+                except(ValueError):
+                    pass
 
     
 
@@ -100,21 +110,4 @@ class HandleCollisionsAction(Action):
         Args:
             cast (Cast): The cast of Actors in the game.
         """
-        if self._is_game_over:
-            snakes = cast.get_actors("snakes")
-            snake1 = snakes[0]
-            snake2 = snakes[1]
-            segments = snake1.get_segments() + snake2.get_segments()
-
-            x = int(constants.MAX_X / 2)
-            y = int(constants.MAX_Y / 2)
-            position = Point(x, y)
-
-            text = f"Game Over!\nPlayer {self._winner} wins!"
-            message = Actor()
-            message.set_text(text)
-            message.set_position(position)
-            cast.add_actor("messages", message)
-
-            for segment in segments:
-                segment.set_color(constants.WHITE)
+        
