@@ -6,7 +6,6 @@ from game.casting.actor import Actor
 from game.casting.explosion import Explosion
 from game.scripting.action import Action
 from game.shared.point import Point
-# from game.services.audio_service import AudioService
 
 
 class HandleCollisionsAction(Action):
@@ -20,13 +19,13 @@ class HandleCollisionsAction(Action):
         _is_game_over (boolean): Whether or not the game is over.
     """
 
-    def __init__(self):
+    def __init__(self, audio_service):
         """Constructs a new HandleCollisionsAction."""
         self._is_game_over = False
         self._winner = 0
         self._bullet_speed = constants.BULLET_SPEED
         self._points = constants.POINTS
-        #self._hit = 
+        self._audio_service = audio_service
 
     def execute(self, cast, script):
         """Executes the handle collisions action.
@@ -60,7 +59,7 @@ class HandleCollisionsAction(Action):
         ships = cast.get_actors("ships")
 
         for ship in ships:
-            if ship._position._x <= 1 * constants.CELL_SIZE and ship.direction < 0 or ship._position._x >= constants.MAX_X - constants.CELL_SIZE and ship.direction > 0: #if the ship is on left edge and moving left or on right edge moving right
+            if (ship._position._x <= 1 * constants.CELL_SIZE and ship.direction < 0) or (ship._position._x >= constants.MAX_X - constants.CELL_SIZE and ship.direction > 0) and ship.advance == True: #if the ship is on left edge and moving left or on right edge moving right
                 change_direction = True
                 break
         if change_direction == True:
@@ -86,11 +85,12 @@ class HandleCollisionsAction(Action):
                 for ship in ships:
                     try:
                         if bullet._position.equals_range(ship._position, 10):
-                            print("Enemy ship down!")
                             cast.add_actor("explosions", Explosion(ship._position.get_x(), ship._position.get_y()))
                             cast.remove_actor("bullets", bullet)
                             cast.remove_actor("ships", ship)
                             score.add_points(ship.score)
+                            self._audio_service.play_sound("Boing")
+                            break
                     except(ValueError):
                         pass
             elif bullet.ally != "player":
@@ -99,6 +99,7 @@ class HandleCollisionsAction(Action):
                         print("Game Over")
                         cast.remove_actor("bullets", bullet)
                         cast.add_actor("explosions", Explosion(player._position.get_x(), player._position.get_y()))
+                        break
                 except(ValueError):
                     pass
 
