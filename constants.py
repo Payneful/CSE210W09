@@ -24,6 +24,7 @@ MAX_SHIP_SPEED = 5
 POINTS = 100
 BULLET_SPEED = 1
 
+
 SHIP_SCORE = 1
 
 
@@ -31,3 +32,13 @@ ROOT_PATH = pathlib.Path(__file__).parent.resolve().parent.resolve()
 
 
 # BOUNCE_SOUND = str(ROOT_PATH.joinpath("batter/assets/sounds/boing.wav"))
+# X represents ship locations. O represents empty spaces.
+X = "X"
+O = "O"
+LEVELS = {"level_1":[X, X, X, O, O, X, X, O, O, O, X, X, O, O, O, X, X, O, O, X,
+                     X, X, O, O, X, X, X, O, O, X, X, X, X, O, O, X, X, X, X, O, 
+                     X, X, X, X, O, X, X, O, O, O, O, O, X, X, X, O, O, X, X, X, 
+                     ]
+        }
+
+SHIP_START = 450
