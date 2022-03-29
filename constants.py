@@ -21,13 +21,15 @@ BLACK = Color(0, 0, 0)
 
 MAX_STAGE = 5
 MAX_SHIP_SPEED = 5
-POINTS = 100
 BULLET_SPEED = 1
-
 SHIP_SCORE = 1
 
 
-ROOT_PATH = pathlib.Path(__file__).parent.resolve().parent.resolve()
+
+
+
+
+# ROOT_PATH = pathlib.Path(__file__).parent.resolve().parent.resolve()
 
 
 # BOUNCE_SOUND = str(ROOT_PATH.joinpath("batter/assets/sounds/boing.wav"))

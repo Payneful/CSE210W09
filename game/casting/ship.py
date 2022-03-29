@@ -25,7 +25,7 @@ class Ship(Actor):
         self._color = color
         self._text = "V"
         self.speed = 1
-        self.score = 1000
+        self.score = constants.SHIP_SCORE
         self._x = x 
         self._y = y
         self.advance = False

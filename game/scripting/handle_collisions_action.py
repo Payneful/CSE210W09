@@ -23,8 +23,6 @@ class HandleCollisionsAction(Action):
         """Constructs a new HandleCollisionsAction."""
         self._is_game_over = False
         self._winner = 0
-        self._bullet_speed = constants.BULLET_SPEED
-        self._points = constants.POINTS
         self._audio_service = audio_service
 
     def execute(self, cast, script):
@@ -102,6 +100,15 @@ class HandleCollisionsAction(Action):
                         break
                 except(ValueError):
                     pass
+
+    def handle_ship_earth_invasion(self, cast):
+        player = cast.get_first_actor("snakes")
+        ships = cast.get_actors("ships")
+
+        for ship in ships:
+            if ship._position.get_y() >= player._position.get_y():
+                cast.remove_actor("ships", ship)
+                print("Game Over")
 
     
 
