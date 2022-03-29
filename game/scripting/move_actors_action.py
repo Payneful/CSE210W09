@@ -11,9 +11,19 @@ class MoveActorsAction(Action):
     """
     def _adjust_ship_speed(self, cast):
         ships = cast.get_actors("ships")
+        self._unready_ship_count = 0
 
+        
         for ship in ships:
             ship.speed = (constants.MAX_SHIP_SPEED / (len(ships)/1.5)) + 1
+            if ship.ready_to_advance == False:
+                self._unready_ship_count = self._unready_ship_count + 1
+        if self._unready_ship_count == 0:
+            for ship in ships:
+                ship.advance = True
+        
+
+            
 
     def execute(self, cast, script):
         """Executes the move actors action.
