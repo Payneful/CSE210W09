@@ -38,3 +38,22 @@ Jake Rammell
 Bradley Payne
 Codie Snow
 Josh Dalton
+
+
+Audio files for game:
+Player laser sounds:
+https://freesound.org/people/jeremysykes/sounds/341235/
+
+alien laser?
+https://www.the3rdsequence.com/soundb/download/?id=51&ext=ogg
+
+alien death:
+https://freesound.org/people/morganpurkis/sounds/394128/
+(needs trimmed) https://freesound.org/people/ProjectsU012/sounds/341701/
+https://freesound.org/people/qubodup/sounds/442827/
+https://freesound.org/people/Jofae/sounds/368511/
+
+player death:
+https://freesound.org/people/derplayer/sounds/587174/
+https://freesound.org/people/MATRIXXX_/sounds/515005/
+https://freesound.org/people/MATRIXXX_/sounds/521105/
