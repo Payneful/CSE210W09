@@ -33,7 +33,6 @@ class StageControl(Action):
 
     def _setup(self, cast):
         formation = random.choice(self._spawn_type)
-        print(formation)
         alternater = 0
         for y in range(1, self._stage):
             for x in range(1, self._max_ships):

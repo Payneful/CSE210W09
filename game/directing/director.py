@@ -18,6 +18,8 @@ class Director:
 
         self._audio_service.initialize()
         self._audio_service.load_sounds("Game/Assets/Sounds/boing.wav", "Boing")
+
+        
         
     def start_game(self, cast, script):
         """Starts the game using the given cast and script. Runs the main game loop.

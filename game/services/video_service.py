@@ -16,6 +16,9 @@ class VideoService:
         """
         self._debug = debug
         self._textures = {}
+        self._clear = self._to_raylib_color(Color(0, 0, 0, 0))
+        # self.load_image("Game/Assets/Images/Player.png", "Player")
+
 
     def close_window(self):
         """Closes the window and releases all computing resources."""
@@ -94,39 +97,55 @@ class VideoService:
         width = pyray.measure_text(text, font_size)
         return int(width / 2)
 
+
+    def load_image(self, file, name, r = 0, g = 0, b = 0):
+        image = pyray.load_image(file)
+        background_color = Color(r, g, b)
+        background_color = self._to_raylib_color(background_color)
+        pyray.image_color_replace(image, background_color, self._clear)
+        texture = pyray.load_texture_from_image(image)
+        self._textures[name] = texture
     
-    def draw_image(self, image, position):
-        filepath = image.get_filename()
-        texture = self._textures[filepath]
-        x = position.get_x()
-        y = position.get_y()
-        raylib_position = pyray.Vector2(x, y)
-        scale = image.get_scale()
-        rotation = image.get_rotation()
-        tint = self._to_raylib_color(255,255,255)
-        pyray.draw_texture_ex(texture, raylib_position, rotation, scale, tint)
-
-    def load_images(self, directory):
-        filepaths = self._get_filepaths(directory, [".png", ".gif", ".jpg", ".jpeg", ".bmp"])
-        for filepath in filepaths:
-            if filepath not in self._textures.keys():
-                texture = pyray.load_texture(filepath)
-                self._textures[filepath] = texture
-
-    def unload_images(self):
-        for texture in self._textures.values():
-            pyray.unload_texture(texture)
-        self._textures.clear()
-
-    def _get_filepaths(self, directory, filter):
-        filepaths = []
-        for file in os.listdir(directory):
-            filename = os.path.join(directory, file)
-            extension = pathlib.Path(filename).suffix.lower()
-            if extension in filter:
-                filepaths.append(filename)
-        return filepaths
+    def draw_actor_image(self, actor):
+        texture = self._textures[actor.get_image()]
+        tint = self._to_raylib_color(Color(255, 255, 255))
+        pyray.draw_texture(texture, actor._position.get_x(), actor._position.get_y(), tint)
 
     def _to_raylib_color(self, color):
         r, g, b, a = color.to_tuple()
         return pyray.Color(r, g, b, a)
+
+    
+    # def draw_image(self, image, position):
+    #     filepath = image.get_filename()
+    #     texture = self._textures[filepath]
+    #     x = position.get_x()
+    #     y = position.get_y()
+    #     raylib_position = pyray.Vector2(x, y)
+    #     scale = image.get_scale()
+    #     rotation = image.get_rotation()
+    #     tint = self._to_raylib_color(255,255,255)
+    #     pyray.draw_texture_ex(texture, raylib_position, rotation, scale, tint)
+
+    # def load_images(self, directory):
+    #     filepaths = self._get_filepaths(directory, [".png", ".gif", ".jpg", ".jpeg", ".bmp"])
+    #     for filepath in filepaths:
+    #         if filepath not in self._textures.keys():
+    #             texture = pyray.load_texture(filepath)
+    #             self._textures[filepath] = texture
+
+    # def unload_images(self):
+    #     for texture in self._textures.values():
+    #         pyray.unload_texture(texture)
+    #     self._textures.clear()
+
+    # def _get_filepaths(self, directory, filter):
+    #     filepaths = []
+    #     for file in os.listdir(directory):
+    #         filename = os.path.join(directory, file)
+    #         extension = pathlib.Path(filename).suffix.lower()
+    #         if extension in filter:
+    #             filepaths.append(filename)
+    #     return filepaths
+
+    
