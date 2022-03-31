@@ -13,9 +13,8 @@ class StageControl(Action):
 
     def __init__(self):
         self._stage = 0
-        self.colors = [constants.BLUE, constants.GREEN, constants.YELLOW, constants.WHITE, constants.RED]
-        self._max_ships = constants.MAX_X // constants.CELL_SIZE - 20
-        print(self._max_ships)
+        self.images = ["Ship1", "Ship2", "Ship3", "Ship4", "Ship5"]
+        self._max_ships = constants.MAX_X // constants.CELL_SIZE - 10
         self._can_fire = False
         self._spawn_type = ["Default", "Crossing", "Edges", "Checkerd", "Downword"]
 
@@ -34,20 +33,20 @@ class StageControl(Action):
     def _setup(self, cast):
         formation = random.choice(self._spawn_type)
         alternater = 0
-        for y in range(1, self._stage):
+        for y in range(1, self._stage + 3):
             for x in range(1, self._max_ships):
                 if formation == "Crossing": #Moves ships in from the sides alternating left and right by row 
                     if alternater % 2 == 0:
-                        start_x = (((x - self._max_ships) - y) - 10) * constants.CELL_SIZE
+                        start_x = (((x - self._max_ships) - y) - 5) * constants.CELL_SIZE
                     else:
-                        start_x = (((x + self._max_ships) + y) + 10 )* constants.CELL_SIZE
+                        start_x = (((x + self._max_ships) + y) + 5 )* constants.CELL_SIZE
                     start_y = y * constants.CELL_SIZE
                 
                 elif formation == "Edges": #Splits the ships down the middle: right half comes from right edge, left half comes from left edge, middle comes from top. Ships overlap here
-                    if x < ((constants.MAX_X // constants.CELL_SIZE)// 2) - 10:
+                    if x < ((constants.MAX_X // constants.CELL_SIZE)// 2) - 5:
                         start_x = -constants.CELL_SIZE
                         start_y = y * constants.CELL_SIZE
-                    elif x == ((constants.MAX_X // constants.CELL_SIZE)// 2) - 10:
+                    elif x == ((constants.MAX_X // constants.CELL_SIZE)// 2) - 5:
                         start_x = (x + 10) * constants.CELL_SIZE
                         start_y = -constants.CELL_SIZE
                     else:
@@ -70,7 +69,7 @@ class StageControl(Action):
                     start_x = constants.MAX_X // 2
                     start_y = -constants.CELL_SIZE
                 
-                cast.add_actor("ships", Ship((x + 10) * constants.CELL_SIZE, (y + 1) * constants.CELL_SIZE, self.colors[(self._stage - 1) % constants.MAX_STAGE], start_x, start_y))
+                cast.add_actor("ships", Ship((x + 5) * constants.CELL_SIZE, (y + 1) * constants.CELL_SIZE, self.images[(self._stage - 1) % constants.MAX_STAGE], start_x, start_y))
             
             if formation == "Crossing":
                 alternater = alternater + 1
@@ -87,7 +86,7 @@ class StageControl(Action):
         dont_shoot_chance = 50 #Higher number = less chance to shoot
         shoot_chance = randint(1, dont_shoot_chance)
         if shoot_chance == 1 and self._can_fire == True: #shoot
-            max_loop = 2 ** self._stage
+            max_loop = 10 ** self._stage
             loop = randint(1, max_loop)
             for _ in range(1, loop):
                 if len(ships) > 0:

@@ -14,7 +14,7 @@ class Ship(Actor):
     Win by destroying all of them loose if they shoot or reach player
     """
 
-    def __init__(self, x = int(constants.MAX_X / 2), y = 2 * constants.CELL_SIZE, color = constants.BLUE, start_x = constants.MAX_X // 2, start_y = -15):
+    def __init__(self, x = int(constants.MAX_X / 2), y = 2 * constants.CELL_SIZE, image = "Ship1", start_x = constants.MAX_X // 2, start_y = -15):
         """
         Parameters: x position, y position,  
         """
@@ -22,7 +22,6 @@ class Ship(Actor):
         self._position = Point(start_x, start_y)
         self.direction = 1 #1 is Right, -1 is Left. This also operates as a speed multiplier and can take floats without breaking anything.
         self._velocity = Point(0, 0) #starts off going Right
-        self._color = color
         self._text = "V"
         self.speed = 1
         self.score = constants.SHIP_SCORE
@@ -31,6 +30,8 @@ class Ship(Actor):
         self.advance = False
         self.ready_to_advance = False
         self._formation_speed = 5
+        self._image = image
+        self.shield = 3
 
     def move_next(self):
         """Moves the actor to its next position according to its velocity. Will wrap the position 

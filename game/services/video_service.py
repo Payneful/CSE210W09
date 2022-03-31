@@ -17,7 +17,6 @@ class VideoService:
         self._debug = debug
         self._textures = {}
         self._clear = self._to_raylib_color(Color(0, 0, 0, 0))
-        # self.load_image("Game/Assets/Images/Player.png", "Player")
 
 
     def close_window(self):
@@ -99,17 +98,22 @@ class VideoService:
 
 
     def load_image(self, file, name, r = 0, g = 0, b = 0):
+        texture = pyray.load_texture(file)
         image = pyray.load_image(file)
         background_color = Color(r, g, b)
         background_color = self._to_raylib_color(background_color)
         pyray.image_color_replace(image, background_color, self._clear)
         texture = pyray.load_texture_from_image(image)
         self._textures[name] = texture
+
+    def draw_actor_images(self, actors):
+        for actor in actors:
+            self.draw_actor_image(actor)
     
     def draw_actor_image(self, actor):
         texture = self._textures[actor.get_image()]
         tint = self._to_raylib_color(Color(255, 255, 255))
-        pyray.draw_texture(texture, actor._position.get_x(), actor._position.get_y(), tint)
+        pyray.draw_texture(texture, actor._position.get_x() - 12, actor._position.get_y() - 12, tint)
 
     def _to_raylib_color(self, color):
         r, g, b, a = color.to_tuple()
