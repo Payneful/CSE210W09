@@ -13,9 +13,8 @@ class StageControl(Action):
 
     def __init__(self):
         self._stage = 0
-        self.colors = [constants.BLUE, constants.GREEN, constants.YELLOW, constants.WHITE, constants.RED]
-        self._max_ships = constants.MAX_X // constants.CELL_SIZE - 20
-        print(self._max_ships)
+        self.image = ["Ship1", "Ship2", "Ship3", "Ship4", "Ship5"]
+        self._max_ships = constants.MAX_X // constants.CELL_SIZE - 10
         self._can_fire = False
         self._spawn_type = ["Default", "Crossing", "Edges", "Checkerd", "Downword"]
 
@@ -35,48 +34,16 @@ class StageControl(Action):
         formation = random.choice(self._spawn_type)
         print(formation)
         alternater = 0
-        for y in range(1, self._stage):
-            for x in range(1, self._max_ships):
-                if formation == "Crossing": #Moves ships in from the sides alternating left and right by row 
-                    if alternater % 2 == 0:
-                        start_x = (((x - self._max_ships) - y) - 10) * constants.CELL_SIZE
-                    else:
-                        start_x = (((x + self._max_ships) + y) + 10 )* constants.CELL_SIZE
-                    start_y = y * constants.CELL_SIZE
-                
-                elif formation == "Edges": #Splits the ships down the middle: right half comes from right edge, left half comes from left edge, middle comes from top. Ships overlap here
-                    if x < ((constants.MAX_X // constants.CELL_SIZE)// 2) - 10:
-                        start_x = -constants.CELL_SIZE
-                        start_y = y * constants.CELL_SIZE
-                    elif x == ((constants.MAX_X // constants.CELL_SIZE)// 2) - 10:
-                        start_x = (x + 10) * constants.CELL_SIZE
-                        start_y = -constants.CELL_SIZE
-                    else:
-                        start_x = constants.MAX_X + constants.CELL_SIZE
-                        start_y = y * constants.CELL_SIZE
-                
-                elif formation == "Checkerd": #Moves ships in from the sides alternating each ship with overlapping.
-                    if alternater % 2 == 0:
-                        start_x = -constants.CELL_SIZE
-                    else:
-                        start_x = constants.MAX_X + constants.CELL_SIZE
-                    start_y = y * constants.CELL_SIZE
+        if self._stage in constants.LEVELS:
+            self._set_level_ships(formation, cast, alternater)
+        else:
+            for y in range(1, self._stage + 2):
+                for x in range(1, self._max_ships):
+                    self._formation(formation, x, y, cast, alternater)
+                if formation == "Crossing":
                     alternater = alternater + 1
-                
-                elif formation == "Downword": #Moves ships down from the top of the screen into formation. Overlapping Y
-                    start_x = (x + 10) * constants.CELL_SIZE
-                    start_y = -constants.CELL_SIZE
-
-                else: #Default Ships move down in one gathering in the middle into formation.
-                    start_x = constants.MAX_X // 2
-                    start_y = -constants.CELL_SIZE
-                
-                cast.add_actor("ships", Ship((x + 10) * constants.CELL_SIZE, (y + 1) * constants.CELL_SIZE, self.colors[(self._stage - 1) % constants.MAX_STAGE], start_x, start_y))
-            
-            if formation == "Crossing":
-                alternater = alternater + 1
-            elif formation == "Checkerd":
-                alternater = y
+                elif formation == "Checkerd":
+                    alternater = y
 
     def _ships_shoot(self, cast, ships):
         self._can_fire = True
@@ -98,4 +65,73 @@ class StageControl(Action):
                 else:
                     break
 
+    def _formation(self, formation, x, y, cast, alternater):
+        if formation == "Crossing": #Moves ships in from the sides alternating left and right by row 
+                        if alternater % 2 == 0:
+                            start_x = (((x - self._max_ships) - y) - 5) * constants.CELL_SIZE
+                        else:
+                            start_x = (((x + self._max_ships) + y) + 5 )* constants.CELL_SIZE
+                        start_y = y * constants.CELL_SIZE
+                    
+        elif formation == "Edges": #Splits the ships down the middle: right half comes from right edge, left half comes from left edge, middle comes from top. Ships overlap here
+            if x < ((constants.MAX_X // constants.CELL_SIZE)// 2) - 5:
+                start_x = -constants.CELL_SIZE
+                start_y = y * constants.CELL_SIZE
+            elif x == ((constants.MAX_X // constants.CELL_SIZE)// 2) - 5:
+                start_x = (x + 5) * constants.CELL_SIZE
+                start_y = -constants.CELL_SIZE
+            else:
+                start_x = constants.MAX_X + constants.CELL_SIZE
+                start_y = y * constants.CELL_SIZE
+        
+        elif formation == "Checkerd": #Moves ships in from the sides alternating each ship with overlapping.
+            if alternater % 2 == 0:
+                start_x = -constants.CELL_SIZE
+            else:
+                start_x = constants.MAX_X + constants.CELL_SIZE
+            start_y = y * constants.CELL_SIZE
+            alternater = alternater + 1
+        
+        elif formation == "Downword": #Moves ships down from the top of the screen into formation. Overlapping Y
+            start_x = (x + 5) * constants.CELL_SIZE
+            start_y = -constants.CELL_SIZE
+
+        else: #Default Ships move down in one gathering in the middle into formation.
+            start_x = constants.MAX_X // 2
+            start_y = -constants.CELL_SIZE
+        
+        cast.add_actor("ships", Ship((x + 5) * constants.CELL_SIZE, (y + 1) * constants.CELL_SIZE, self.image[(self._stage - 1) % constants.MAX_STAGE], start_x, start_y))
+        
     
+
+    def _set_level_ships(self, formation, cast, alternater):
+        formation = random.choice(self._spawn_type)
+        tokens = constants.LEVELS[self._stage]
+        x = 4 
+        y = 1
+
+        for token in tokens:
+            x = x + 1
+            if x > self._max_ships:
+                x = 5
+                y = y + 1
+                if formation == "Crossing":
+                    alternater = alternater + 1
+                elif formation == "Checkerd":
+                    alternater = y
+
+            if token != 0:
+                self._formation(formation, x, y, cast, alternater)
+
+
+    
+                    
+
+            
+
+
+            
+        
+
+
+        

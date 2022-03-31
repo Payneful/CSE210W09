@@ -5,8 +5,8 @@ import pathlib
 COLUMNS = 40
 ROWS = 20
 CELL_SIZE = 15
-MAX_X = 1200
-MAX_Y = 900
+MAX_X = 40 * CELL_SIZE #Subtract this with 10 to get Max ship count. Max_X // CELL_SIZE - 10
+MAX_Y = 60 * CELL_SIZE
 FRAME_RATE = 12
 FONT_SIZE = 15
 CAPTION = "Snake"
@@ -23,13 +23,12 @@ MAX_STAGE = 5
 MAX_SHIP_SPEED = 5
 BULLET_SPEED = 1
 
-# X represents ship locations. O represents empty spaces.
-X = "X"
-O = "O"
-LEVELS = {"level_1":[X, X, X, O, O, X, X, O, O, O, X, X, O, O, O, X, X, O, O, X,
-                     X, X, O, O, X, X, X, O, O, X, X, X, X, O, O, X, X, X, X, O, 
-                     X, X, X, X, O, X, X, O, O, O, O, O, X, X, X, O, O, X, X, X, 
-                     ]
+SHIP_SCORE = 1
+
+#0 = empty, 1 is blue, 2 is Green, 3 is Orange, 4 is Red, and 5 is Purple
+
+LEVELS = {0:    [1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         }
 
-SHIP_START = 450

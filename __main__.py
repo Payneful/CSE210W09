@@ -1,5 +1,4 @@
 import constants
-
 from game.casting.cast import Cast
 from game.casting.food import Food
 from game.casting.score import Score
@@ -26,11 +25,6 @@ def main():
     cast.add_actor("snakes", Snake())
     cast.add_actor("scores", Score())
 
-    level = constants.LEVELS
-    key_name = "level_1"
-    
-    set_level_ships(level, key_name, cast)
-
     # cast.add_actor("ships", Ship())
     # cast.add_actor("ships", Ship(300))
    
@@ -52,24 +46,7 @@ def main():
     director.start_game(cast, script)
 
 
-def set_level_ships(dictionary, key_name, cast):
-    tokens = dictionary[key_name]
-    ship_start = constants.SHIP_START
 
-    for index_val in range(0, len(tokens)):
-        token = tokens[index_val]
-        if index_val < 20:
-            pos = index_val * constants.CELL_SIZE + ship_start
-            y_pos = 2 * constants.CELL_SIZE
-
-        else:
-            pos = (index_val % 20) * constants.CELL_SIZE + ship_start
-            y_pos = (index_val // 20 + 2) *constants.CELL_SIZE
-        
-
-
-        if token == constants.X:
-            cast.add_actor("ships", Ship(pos, y_pos))
 
 
 if __name__ == "__main__":

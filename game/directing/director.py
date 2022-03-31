@@ -18,6 +18,8 @@ class Director:
 
         self._audio_service.initialize()
         self._audio_service.load_sounds("Game/Assets/Sounds/boing.wav", "Boing")
+
+        
         
     def start_game(self, cast, script):
         """Starts the game using the given cast and script. Runs the main game loop.
@@ -27,6 +29,14 @@ class Director:
             script (Script): The script of actions.
         """
         self._video_service.open_window()
+        self._video_service.load_image("Game\Assets\Images\Player.png", "Player", 0, 0, 0)
+        self._video_service.load_image("Game\Assets\Images\Player_lazer.png", "Player Lazer", 0, 0, 0)
+        self._video_service.load_image("Game\Assets\Images\Ship_lazer.png", "Ship Lazer", 0, 0, 0)
+        self._video_service.load_image("Game\Assets\Images\Alien_blue.png", "Ship1", 0, 0, 0)
+        self._video_service.load_image("Game\Assets\Images\Alien_green.png", "Ship2", 0, 0, 0)
+        self._video_service.load_image("Game\Assets\Images\Alien_orange.png", "Ship3", 0, 0, 0)
+        self._video_service.load_image("Game\Assets\Images\Alien_red.png", "Ship4", 0, 0, 0)
+        self._video_service.load_image("Game\Assets\Images\Alien_purple.png", "Ship5", 0, 0, 0)
         while self._video_service.is_window_open():
             self._execute_actions("input", cast, script)
             self._execute_actions("update", cast, script)
