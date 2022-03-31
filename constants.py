@@ -5,9 +5,9 @@ import pathlib
 COLUMNS = 40
 ROWS = 20
 CELL_SIZE = 15
-MAX_X = 50 * CELL_SIZE
-MAX_Y = 60 * CELL_SIZE
-FRAME_RATE = 20
+MAX_X = 1200
+MAX_Y = 900
+FRAME_RATE = 12
 FONT_SIZE = 15
 CAPTION = "Snake"
 SNAKE_LENGTH = 8
@@ -22,14 +22,14 @@ BLACK = Color(0, 0, 0)
 MAX_STAGE = 5
 MAX_SHIP_SPEED = 5
 BULLET_SPEED = 1
-SHIP_SCORE = 1
 
+# X represents ship locations. O represents empty spaces.
+X = "X"
+O = "O"
+LEVELS = {"level_1":[X, X, X, O, O, X, X, O, O, O, X, X, O, O, O, X, X, O, O, X,
+                     X, X, O, O, X, X, X, O, O, X, X, X, X, O, O, X, X, X, X, O, 
+                     X, X, X, X, O, X, X, O, O, O, O, O, X, X, X, O, O, X, X, X, 
+                     ]
+        }
 
-
-
-
-
-# ROOT_PATH = pathlib.Path(__file__).parent.resolve().parent.resolve()
-
-
-# BOUNCE_SOUND = str(ROOT_PATH.joinpath("batter/assets/sounds/boing.wav"))
+SHIP_START = 450
