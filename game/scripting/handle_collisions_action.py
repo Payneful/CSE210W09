@@ -1,6 +1,9 @@
+from multiprocessing.sharedctypes import Value
 from tkinter import N
+from turtle import position
 import constants
 from game.casting.actor import Actor
+from game.casting.explosion import Explosion
 from game.scripting.action import Action
 from game.shared.point import Point
 
@@ -16,12 +19,11 @@ class HandleCollisionsAction(Action):
         _is_game_over (boolean): Whether or not the game is over.
     """
 
-    def __init__(self):
+    def __init__(self, audio_service):
         """Constructs a new HandleCollisionsAction."""
         self._is_game_over = False
         self._winner = 0
-        self._bullet_speed = constants.BULLET_SPEED
-        self._points = constants.POINTS
+        self._audio_service = audio_service
 
     def execute(self, cast, script):
         """Executes the handle collisions action.
@@ -42,20 +44,11 @@ class HandleCollisionsAction(Action):
         Args:
             cast (Cast): The cast of Actors in the game.
         """
+        range = 10
         bullets = cast.get_actors("bullets")
-        
         for bullet in bullets:
-            not_done_moving = True
-            loop_count = 0
-            while not_done_moving:
-                if bullet._position.get_y() <= 0:
-                    cast.remove_actor("bullets", bullet)
-                    not_done_moving = False
-                else:
-                    bullet._position.add([0,-constants.CELL_SIZE])
-                    loop_count += 1
-                    if loop_count == self._bullet_speed:
-                        not_done_moving = False
+            if bullet._position.get_y() <= 0 or bullet._position.get_y() > constants.MAX_Y:
+                cast.remove_actor("bullets", bullet)
     
     def _handle_ship_edge_collision(self, cast):
         """
@@ -64,31 +57,58 @@ class HandleCollisionsAction(Action):
         ships = cast.get_actors("ships")
 
         for ship in ships:
-            if ship._position._x <= 1 * constants.CELL_SIZE and ship._velocity._x < 0 or ship._position._x >= constants.MAX_X - constants.CELL_SIZE and ship._velocity._x > 0: #if the ship is on left edge and moving left or on right edge moving right
+            if (ship._position._x <= 1 * constants.CELL_SIZE and ship.direction < 0) or (ship._position._x >= constants.MAX_X - constants.CELL_SIZE and ship.direction > 0) and ship.advance == True: #if the ship is on left edge and moving left or on right edge moving right
                 change_direction = True
                 break
         if change_direction == True:
             for ship in ships:
+                ship.direction = ship.direction * -1
                 ship._position.add([0, 15])
-                ship._velocity._x = ship._velocity._x * -1
 
     def _handle_bullet_ship_collision(self, cast):
         """Determines if the bullet collides with the ships
         Args:
             self-- an instance of Handle_collisiions_action
             cast-- an instance of the cast class"""
+        
 
         bullets = cast.get_actors("bullets")
         ships = cast.get_actors("ships")
         score = cast.get_first_actor("scores")
+        player = cast.get_first_actor("snakes")
+
 
         for bullet in bullets:
-            for ship in ships:
-                if bullet._position.equals(ship._position):
-                    print("Enemy ship down!")
-                    cast.remove_actor("bullets", bullet)
-                    cast.remove_actor("ships", ship)
-                    score.add_points(self._points)
+            if bullet.ally != "ship":
+                for ship in ships:
+                    try:
+                        if bullet._position.equals_range(ship._position, 10):
+                            cast.add_actor("explosions", Explosion(ship._position.get_x(), ship._position.get_y()))
+                            cast.remove_actor("bullets", bullet)
+                            cast.remove_actor("ships", ship)
+                            score.add_points(ship.score)
+                            self._audio_service.play_sound("Boing")
+                            break
+                    except(ValueError):
+                        pass
+            elif bullet.ally != "player":
+                try:
+                    if bullet._position.equals_range(player._position, 10):
+                        print("Game Over")
+                        cast.remove_actor("bullets", bullet)
+                        cast.add_actor("explosions", Explosion(player._position.get_x(), player._position.get_y()))
+                        break
+                except(ValueError):
+                    pass
+
+    def handle_ship_earth_invasion(self, cast):
+        player = cast.get_first_actor("snakes")
+        ships = cast.get_actors("ships")
+
+        for ship in ships:
+            if ship._position.get_y() >= player._position.get_y():
+                cast.remove_actor("ships", ship)
+                print("Game Over")
 
     
 
@@ -98,21 +118,4 @@ class HandleCollisionsAction(Action):
         Args:
             cast (Cast): The cast of Actors in the game.
         """
-        if self._is_game_over:
-            snakes = cast.get_actors("snakes")
-            snake1 = snakes[0]
-            snake2 = snakes[1]
-            segments = snake1.get_segments() + snake2.get_segments()
-
-            x = int(constants.MAX_X / 2)
-            y = int(constants.MAX_Y / 2)
-            position = Point(x, y)
-
-            text = f"Game Over!\nPlayer {self._winner} wins!"
-            message = Actor()
-            message.set_text(text)
-            message.set_position(position)
-            cast.add_actor("messages", message)
-
-            for segment in segments:
-                segment.set_color(constants.WHITE)
+        

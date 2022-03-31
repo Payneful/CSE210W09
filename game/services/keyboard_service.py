@@ -37,3 +37,7 @@ class KeyboardService:
         """
         pyray_key = self._keys[key.lower()]
         return pyray.is_key_down(pyray_key)
+
+    def is_key_pressed(self, key):
+        pyray_key = self._keys[key.lower()]
+        return pyray.is_key_pressed(pyray_key)

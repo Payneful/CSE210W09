@@ -11,8 +11,11 @@ from game.scripting.move_actors_action import MoveActorsAction
 from game.scripting.handle_collisions_action import HandleCollisionsAction
 from game.scripting.draw_actors_action import DrawActorsAction
 from game.directing.director import Director
+from game.scripting.stage_control import StageControl
+from game.services.audio_service import AudioService
 from game.services.keyboard_service import KeyboardService
 from game.services.video_service import VideoService
+from game.scripting.explosion_control import ExplosionControl
 from game.shared.color import Color
 from game.shared.point import Point
 
@@ -23,25 +26,23 @@ def main():
     cast.add_actor("snakes", Snake())
     cast.add_actor("scores", Score())
 
-    level = constants.LEVELS
-    key_name = "level_1"
-    
-    set_level_ships(level, key_name, cast)
 
-    # cast.add_actor("ships", Ship())
-    # cast.add_actor("ships", Ship(300))
    
     # start the game
     keyboard_service = KeyboardService()
     video_service = VideoService()
+    audio_service = AudioService()
 
     script = Script()
     script.add_action("input", ControlActorsAction(keyboard_service))
     script.add_action("update", MoveActorsAction())
-    script.add_action("update", HandleCollisionsAction())
+    script.add_action("update", HandleCollisionsAction(audio_service))
     script.add_action("output", DrawActorsAction(video_service))
+
+    script.add_action("update", StageControl())
+    script.add_action("update", ExplosionControl())
     
-    director = Director(video_service)
+    director = Director(video_service, audio_service)
     director.start_game(cast, script)
 
 

@@ -11,18 +11,32 @@ class Bullet(Actor):
     def __init__(self, position_x, position_y, ally = "player"):
         super().__init__()
         self._prepare_bullet(position_x, position_y, ally)
+        self._set_velocity()
         
     def _set_velocity(self):
-        if self._ally == "player":
-            self._set_velocity(0, -15)
-            self.color = constants.BLUE
+        if self.ally == "player":
+            self._velocity = Point(0, -15)
+            self._color = constants.BLUE
+            self._image = "Player Lazer"
         else:
-            self._set_velocity(0, 15)
-            self.color = constants.RED
+            self._velocity = Point(0, 15)
+            self._color = constants.RED
+            self._image = "Ship Lazer"
 
     def _prepare_bullet(self, position_x, position_y, ally):
-        self._ally = ally
+        self.ally = ally
         self._position = Point(position_x, position_y)
-        self._velocity = Point(0, 0)
-        self._text = "^"
-        self.color = constants.WHITE
+        self._text = "|"
+
+    def move_next(self):
+        """Moves the actor to its next position according to its velocity. Will wrap the position 
+        from one side of the screen to the other when it reaches the given maximum x and y values.
+        
+        Args:
+            max_x (int): The maximum x value.
+            max_y (int): The maximum y value.
+        """
+        for _ in range(constants.BULLET_SPEED):
+            x = (self._position.get_x() + self._velocity.get_x())
+            y = (self._position.get_y() + self._velocity.get_y())
+            self._position = Point(x, y)

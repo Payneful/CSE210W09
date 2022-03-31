@@ -16,6 +16,7 @@ class Snake(Actor):
         super().__init__()
         self._segments = []
         self._prepare_body()
+        self._image = "Player"
 
         #added things
         self._firemode = 0

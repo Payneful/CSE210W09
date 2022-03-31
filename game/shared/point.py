@@ -51,6 +51,19 @@ class Point:
         """
         return self._x == other.get_x() and self._y == other.get_y()
 
+    def equals_range(self, other, range):
+        """Whether or not this Point is in box range from the given one.
+
+        Args:
+            other (Point): The Point to compare.
+            range (Number): The range to compare
+
+        Returns: 
+            boolean: True if both x and y are equal; false if otherwise.
+            """
+        
+        return self._x + range >= other.get_x() and self._x - range <= other.get_x() and self._y + (range * 2) >= other.get_y() and self._y - (range * 2) <= other.get_y()
+
     def get_x(self):
         """Gets the horizontal distance.
         
