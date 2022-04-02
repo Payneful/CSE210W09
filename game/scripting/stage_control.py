@@ -11,12 +11,15 @@ import constants
 class StageControl(Action):
     
 
-    def __init__(self):
+    def __init__(self, audio_service, music_control):
         self._stage = 0
         self.image = ["Ship1", "Ship2", "Ship3", "Ship4", "Ship5"]
         self._max_ships = constants.MAX_X // constants.CELL_SIZE - 10
         self._can_fire = False
         self._spawn_type = ["Default", "Crossing", "Edges", "Checkerd", "Downword"]
+        self._audio_service = audio_service
+        self._music_control = music_control
+        self._cooldown = 0
 
     def execute(self, cast, script):
         ships = cast.get_actors("ships")
@@ -25,6 +28,7 @@ class StageControl(Action):
             # if self._stage < constants.MAX_STAGE:
             self._stage = self._stage + 1
             self._setup(cast)
+            self._music_control.update_music(self._stage)
         
         else:
             self._ships_shoot(cast, ships)
@@ -32,7 +36,6 @@ class StageControl(Action):
 
     def _setup(self, cast):
         formation = random.choice(self._spawn_type)
-        print(formation)
         alternater = 0
         if self._stage in constants.LEVELS:
             self._set_level_ships(formation, cast, alternater)
@@ -51,17 +54,22 @@ class StageControl(Action):
             if ship.advance == False:
                 self._can_fire = False
 
+        if self._cooldown > 0:
+            self._can_fire = False
+            self._cooldown = self._cooldown - 1
 
-        dont_shoot_chance = 50 #Higher number = less chance to shoot
+        dont_shoot_chance = 75 // self._stage #Higher number = less chance to shoot
         shoot_chance = randint(1, dont_shoot_chance)
         if shoot_chance == 1 and self._can_fire == True: #shoot
-            max_loop = 2 ** self._stage
+            max_loop = self._stage * (self._max_ships // 2)
             loop = randint(1, max_loop)
+            self._cooldown = 10
             for _ in range(1, loop):
                 if len(ships) > 0:
                     ship = random.choice(ships)
                     cast.add_actor("bullets", Bullet(ship._position._x, ship._position._y + 15, "ship"))
                     ships.remove(ship) #Prevents a ship from being selected multiple times
+                    self._audio_service.play_sound("Ship_laser")
                 else:
                     break
 

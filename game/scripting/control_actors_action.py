@@ -14,7 +14,7 @@ class ControlActorsAction(Action):
         _keyboard_service (KeyboardService): An instance of KeyboardService.
     """  
 
-    def __init__(self, keyboard_service):
+    def __init__(self, keyboard_service, audio_service):
         """Constructs a new ControlActorsAction using the specified KeyboardService.
         
         Args:
@@ -24,6 +24,7 @@ class ControlActorsAction(Action):
         self._direction = Point(constants.CELL_SIZE, 0)
         self.key3 = 'KEY_DOWN'
         self.player1_move = ["a", "d", "space"]
+        self._audio_service = audio_service
 
         
     def execute(self, cast, script):
@@ -57,6 +58,8 @@ class ControlActorsAction(Action):
         
         # shoot
         if self._keyboard_service.is_key_pressed('spacebar'):
+            self._audio_service.play_sound("Player_laser")
             cast.add_actor("bullets", Bullet(snake._position.get_x(),snake._position.get_y()))
+
 
     

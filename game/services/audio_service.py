@@ -12,9 +12,10 @@ class AudioService():
     def initialize(self):
         pyray.init_audio_device()
     
-    def load_sounds(self, filepath, name):
+    def load_sounds(self, filepath, name, volume = 1):
         sound = pyray.load_sound(filepath)
         self._sounds[name] = sound
+        pyray.set_sound_volume(sound, volume)
 
     def unload_sounds(self):
         for sound in self._sounds.values():
@@ -24,9 +25,21 @@ class AudioService():
     def play_sound(self, name):
         sound = self._sounds[name]
         pyray.play_sound(sound)
+    
+    def stop_sound(self, name):
+        pyray.stop_sound(name) 
+
+    def check_sound(self, name):
+        sound = self._sounds[name]
+        return pyray.is_sound_playing(sound)
 
     def release(self):
         pyray.close_audio_device()
+
+    def change_pitch(self, name, pitch):
+        sound = self._sounds[name]
+        pyray.set_sound_pitch(sound, pitch)
+
 
         
     # def load_sounds(self, directory):
@@ -41,9 +54,6 @@ class AudioService():
     #     sound = self._sounds[filepath]
     #     # pyray.set_sound_volume(volume)
     #     pyray.play_sound(sound)
-    
-    def release(self):
-        pyray.close_audio_device()
         
     # def unload_sounds(self):
     #     for sound in self._sounds.values():

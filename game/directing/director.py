@@ -17,7 +17,11 @@ class Director:
         self._audio_service = audio_service
 
         self._audio_service.initialize()
-        self._audio_service.load_sounds("Game/Assets/Sounds/boing.wav", "Boing")
+        self._audio_service.load_sounds("Game/Assets/Sounds/8bit_bomb_explosion.wav", "Explosion", 0.8)
+        self._audio_service.load_sounds("Game/Assets/Sounds/laser1.wav", "Player_laser", 0.5)
+        self._audio_service.load_sounds("Game/Assets/Sounds/laser9.wav", "Ship_laser", 0.8)
+        self._audio_service.load_sounds("Game/Assets/Sounds/DST-TowerDefenseTheme.mp3", "Music")
+
 
         
         
@@ -52,6 +56,8 @@ class Director:
         self._video_service.load_image("Game\Assets\Images\Explosion13.png", "Explosion13", 0, 0, 0)
         self._video_service.load_image("Game\Assets\Images\Explosion14.png", "Explosion14", 0, 0, 0)
         self._video_service.load_image("Game\Assets\Images\Explosion15.png", "Explosion15", 0, 0, 0)
+
+
         while self._video_service.is_window_open():
             self._execute_actions("input", cast, script)
             self._execute_actions("update", cast, script)

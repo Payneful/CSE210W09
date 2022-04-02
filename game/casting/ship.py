@@ -29,7 +29,7 @@ class Ship(Actor):
         self._y = y
         self.advance = False
         self.ready_to_advance = False
-        self._formation_speed = 5
+        self._formation_speed = 7
         self._image = image
 
     def move_next(self):

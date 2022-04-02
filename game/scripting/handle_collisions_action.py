@@ -76,6 +76,7 @@ class HandleCollisionsAction(Action):
         ships = cast.get_actors("ships")
         score = cast.get_first_actor("scores")
         player = cast.get_first_actor("snakes")
+        lives = cast.get_first_actor("lives")
 
 
         for bullet in bullets:
@@ -87,15 +88,17 @@ class HandleCollisionsAction(Action):
                             cast.remove_actor("bullets", bullet)
                             cast.remove_actor("ships", ship)
                             score.add_points(ship.score)
-                            self._audio_service.play_sound("Boing")
+                            self._audio_service.play_sound("Explosion")
                             break
                     except(ValueError):
                         pass
             elif bullet.ally != "player":
                 try:
                     if bullet._position.equals_range(player._position, 10):
-                        print("Game Over")
+                        print("hit")
+                        lives.change_lives(-1)
                         cast.remove_actor("bullets", bullet)
+                        self._audio_service.play_sound("Explosion")
                         cast.add_actor("explosions", Explosion(player._position.get_x(), player._position.get_y()))
                         break
                 except(ValueError):
@@ -119,5 +122,5 @@ class HandleCollisionsAction(Action):
             cast (Cast): The cast of Actors in the game.
         """
         cast.add_actor("messages", "Game Over")
-        
+
         
