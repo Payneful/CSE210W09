@@ -34,8 +34,10 @@ class DrawActorsAction(Action):
         ships = cast.get_actors("ships")
         explosions = cast.get_actors("explosions")
         lives = cast.get_first_actor("lives")
+        background = cast.get_first_actor("background")
 
         self._video_service.clear_buffer()
+        self._video_service.draw_actor_image(background)
         self._video_service.draw_actor_images(bullets)
         if snake != None:
             self._video_service.draw_actor_image(snake)

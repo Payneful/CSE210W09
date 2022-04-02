@@ -1,5 +1,6 @@
 from email.mime import audio
 import constants
+from game.casting.background import Background
 from game.casting.cast import Cast
 from game.casting.food import Food
 from game.casting.score import Score
@@ -28,6 +29,7 @@ def main():
     cast.add_actor("snakes", Snake())
     cast.add_actor("lives", Lives())
     cast.add_actor("scores", Score(cast))
+    cast.add_actor("background", Background())
     
 
     # cast.add_actor("ships", Ship())

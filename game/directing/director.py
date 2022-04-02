@@ -56,6 +56,7 @@ class Director:
         self._video_service.load_image("Game\Assets\Images\Explosion13.png", "Explosion13", 0, 0, 0)
         self._video_service.load_image("Game\Assets\Images\Explosion14.png", "Explosion14", 0, 0, 0)
         self._video_service.load_image("Game\Assets\Images\Explosion15.png", "Explosion15", 0, 0, 0)
+        self._video_service.load_image("Game\Assets\Images\Background.png", "background", 0, 0, 0)
 
 
         while self._video_service.is_window_open():
