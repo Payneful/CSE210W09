@@ -11,8 +11,8 @@ class Explosion(Actor):
         self.stage = 0
         self._position = Point(x, y)
         self._text = "O"
-        self._colors = [constants.RED, constants.YELLOW]
+        self._images = ["Explosion1", "Explosion2", "Explosion3", "Explosion4", "Explosion5", "Explosion6", "Explosion7", "Explosion8", "Explosion9", "Explosion10", "Explosion11", "Explosion12", "Explosion13", "Explosion14", "Explosion15"]
 
     def progress(self):
-        self._color = self._colors[self.stage % 2]
+        self._image = self._images[self.stage % 16]
 

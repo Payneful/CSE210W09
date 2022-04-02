@@ -118,4 +118,6 @@ class HandleCollisionsAction(Action):
         Args:
             cast (Cast): The cast of Actors in the game.
         """
+        cast.add_actor("messages", "Game Over")
+        
         
