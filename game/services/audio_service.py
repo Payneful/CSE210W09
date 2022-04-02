@@ -40,6 +40,10 @@ class AudioService():
         sound = self._sounds[name]
         pyray.set_sound_pitch(sound, pitch)
 
+    def change_volume(self, name, volume):
+        sound = self._sounds[name]
+        pyray.set_sound_volume(sound, volume)
+
 
         
     # def load_sounds(self, directory):

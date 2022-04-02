@@ -2,6 +2,7 @@ import os
 import pathlib
 import pyray
 from constants import *
+import constants
 
 class VideoService:
     """Outputs the game state. The responsibility of the class of objects is to draw the game state 
@@ -47,8 +48,10 @@ class VideoService:
 
         if centered:
             width = pyray.measure_text(text, font_size)
-            offset = int(width / 2)
-            x -= offset
+            # offset = int(width / 2)
+            # x -= offset
+            x = constants.MAX_X // 2 - (width // 2) 
+            y = constants.MAX_Y // 2
             
         pyray.draw_text(text, x, y, font_size, color)
         
@@ -118,3 +121,4 @@ class VideoService:
     def _to_raylib_color(self, color):
         r, g, b, a = color.to_tuple()
         return pyray.Color(r, g, b, a)
+

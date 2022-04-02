@@ -12,9 +12,12 @@ class Score(Actor):
     Attributes:
         _points (int): The points earned in the game.
     """
-    def __init__(self):
+    def __init__(self, cast):
         super().__init__()
         self._points = 0
+        self.reward = 0
+        self._points_for_health = 10000
+        self._lives = cast.get_first_actor("lives")
         self.add_points(0)
 
     def add_points(self, points):
@@ -24,4 +27,9 @@ class Score(Actor):
             points (int): The points to add.
         """
         self._points += points
-        self.set_text(f"Score: {self._points}")
+        if self._points > self._points_for_health:
+            self._points = self._points % self._points_for_health
+            self._reward = self.reward + 1
+            self._lives.change_lives(1)
+
+        self.set_text(f"Score: {self._points + (self._points_for_health * self.reward)}")

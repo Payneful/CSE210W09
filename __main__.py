@@ -26,8 +26,9 @@ def main():
     # create the cast
     cast = Cast()
     cast.add_actor("snakes", Snake())
-    cast.add_actor("scores", Score())
     cast.add_actor("lives", Lives())
+    cast.add_actor("scores", Score(cast))
+    
 
     # cast.add_actor("ships", Ship())
     # cast.add_actor("ships", Ship(300))

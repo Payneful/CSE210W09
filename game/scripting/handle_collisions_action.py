@@ -1,11 +1,14 @@
 from multiprocessing.sharedctypes import Value
+from pickle import TRUE
 from tkinter import N
 from turtle import position
 import constants
 from game.casting.actor import Actor
 from game.casting.explosion import Explosion
 from game.scripting.action import Action
+from game.scripting.control_actors_action import ControlActorsAction
 from game.shared.point import Point
+from game.casting.text import Text
 
 
 class HandleCollisionsAction(Action):
@@ -32,11 +35,14 @@ class HandleCollisionsAction(Action):
             cast (Cast): The cast of Actors in the game.
             script (Script): The script of Actions in the game.
         """
+        self._handle_bullet_edge_of_map(cast)
+        self._handle_ship_edge_collision(cast)
         if not self._is_game_over:
-            self._handle_bullet_edge_of_map(cast)
-            self._handle_ship_edge_collision(cast)
             self._handle_bullet_ship_collision(cast)
+            self._handle_ship_earth_invasion(cast)
+            self._check_health(cast, script)
             # self._handle_game_over(cast)
+            
 
     def _handle_bullet_edge_of_map(self, cast):
         """Sets the game over flag if the snake collides with one of its segments.
@@ -71,56 +77,71 @@ class HandleCollisionsAction(Action):
             self-- an instance of Handle_collisiions_action
             cast-- an instance of the cast class"""
         
-
         bullets = cast.get_actors("bullets")
         ships = cast.get_actors("ships")
         score = cast.get_first_actor("scores")
         player = cast.get_first_actor("snakes")
         lives = cast.get_first_actor("lives")
+        
 
-
-        for bullet in bullets:
-            if bullet.ally != "ship":
-                for ship in ships:
-                    try:
-                        if bullet._position.equals_range(ship._position, 10):
-                            cast.add_actor("explosions", Explosion(ship._position.get_x(), ship._position.get_y()))
+        if player != None:
+            for bullet in bullets:
+                if bullet.ally != "ship":
+                    for ship in ships:
+                        try:
+                            if bullet._position.equals_range(ship._position, 10):
+                                cast.add_actor("explosions", Explosion(ship._position.get_x(), ship._position.get_y()))
+                                cast.remove_actor("bullets", bullet)
+                                cast.remove_actor("ships", ship)
+                                score.add_points(ship.score)
+                                self._audio_service.play_sound("Explosion")
+                                break
+                        except(ValueError):
+                            pass
+                elif bullet.ally != "player":
+                        if bullet._position.equals_range(player._position, 10):
+                            lives.change_lives(-1)
                             cast.remove_actor("bullets", bullet)
-                            cast.remove_actor("ships", ship)
-                            score.add_points(ship.score)
                             self._audio_service.play_sound("Explosion")
-                            break
-                    except(ValueError):
-                        pass
-            elif bullet.ally != "player":
-                try:
-                    if bullet._position.equals_range(player._position, 10):
-                        print("hit")
-                        lives.change_lives(-1)
-                        cast.remove_actor("bullets", bullet)
-                        self._audio_service.play_sound("Explosion")
-                        cast.add_actor("explosions", Explosion(player._position.get_x(), player._position.get_y()))
-                        break
-                except(ValueError):
-                    pass
+                            cast.add_actor("explosions", Explosion(player._position.get_x(), player._position.get_y()))
+                            if lives.get_lives() < 1:
+                                break
 
-    def handle_ship_earth_invasion(self, cast):
+
+    def _handle_ship_earth_invasion(self, cast):
         player = cast.get_first_actor("snakes")
         ships = cast.get_actors("ships")
+        lives = cast.get_first_actor("lives")
+        if player != None:
+            for ship in ships:
+                if ship._position.get_y() >= player._position.get_y():
+                    cast.remove_actor("ships", ship)
+                    cast.add_actor("explosions", Explosion(player._position.get_x(), player._position.get_y()))
+                    lives._lives = 0
+                    print("Game Over")
+                    break
 
-        for ship in ships:
-            if ship._position.get_y() >= player._position.get_y():
-                cast.remove_actor("ships", ship)
-                print("Game Over")
-
+    def _check_health(self, cast, script):
+        lives = cast.get_first_actor("lives")
+        if lives.get_lives() < 1:
+            self._handle_game_over(cast, script)
     
 
-    def _handle_game_over(self, cast):
+    def _handle_game_over(self, cast, script):
         """Shows the 'game over' message and turns the snake and food white if the game is over.
         
         Args:
             cast (Cast): The cast of Actors in the game.
         """
-        cast.add_actor("messages", "Game Over")
+        self._is_game_over = True
+        self._audio_service.change_volume("Music", 0)
+        cast.add_actor("messages", Text("Game Over"))
+        player = cast.get_first_actor("snakes")
+        cast.remove_actor("snakes", player) 
+        for input in script.get_actions("input"):
+            script.remove_action("input", input)
+
+
+
 
         

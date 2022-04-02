@@ -59,9 +59,12 @@ class Cast:
         Returns:
             List: The first actor in the group.
         """
-        result = None
-        if group in self._actors.keys():
-            result = self._actors[group][0]
+        try:
+            result = None
+            if group in self._actors.keys():
+                result = self._actors[group][0]
+        except(IndexError):
+            result = None
         return result
 
     def remove_actor(self, group, actor):
