@@ -29,7 +29,7 @@ class Score(Actor):
         self._points += points
         if self._points > self._points_for_health:
             self._points = self._points % self._points_for_health
-            self._reward = self.reward + 1
+            self._reward = self._reward + 1
             self._lives.change_lives(1)
 
         self.set_text(f"Score: {self._points + (self._points_for_health * self._reward)}")
