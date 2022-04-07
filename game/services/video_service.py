@@ -101,7 +101,7 @@ class VideoService:
 
 
     def load_image(self, file, name, r = 0, g = 0, b = 0):
-        texture = pyray.load_texture(file)
+        # texture = pyray.load_texture(file)
         image = pyray.load_image(file)
         background_color = Color(r, g, b)
         background_color = self._to_raylib_color(background_color)

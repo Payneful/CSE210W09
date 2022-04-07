@@ -18,7 +18,6 @@ class MusicControl(Action):
 
     def update_music(self, stage):
         self._pitch = ((stage / 10) % 0.6) + 0.9
-        print(self._pitch)
         self._audio_service.change_pitch(self._music, self._pitch)
             
 
